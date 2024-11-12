@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.bangkit.capstone.kulinerin"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.bangkit.capstone.kulinerin"
@@ -32,6 +32,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
