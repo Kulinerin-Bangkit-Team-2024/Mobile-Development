@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.KulinerIn" parent="Base.Theme.KulinerIn" />
+    
+    <style name="Widget.KulinerIn.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
+        <item name="android:background">@color/white</item>
+        <item name="android:elevation">8dp</item>
+    </style>
 </resources>

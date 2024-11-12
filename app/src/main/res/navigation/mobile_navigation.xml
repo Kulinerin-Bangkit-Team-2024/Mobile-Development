@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.bangkit.capstone.kulinerin.ui.fragment.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_home_fragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_foods"
+        android:name="com.bangkit.capstone.kulinerin.ui.fragment.FoodsFragment"
+        android:label="fragment_foods"
+        tools:layout="@layout/fragment_foods">
+
+        <action
+            android:id="@+id/action_foods_fragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_restaurants"
+        android:name="com.bangkit.capstone.kulinerin.ui.fragment.RestaurantsFragment"
+        android:label="fragment_restaurants"
+        tools:layout="@layout/fragment_restaurants">
+
+        <action
+            android:id="@+id/action_restaurants_fragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.bangkit.capstone.kulinerin.ui.fragment.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile">
+
+        <action
+            android:id="@+id/action_profile_fragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"/>
+
+    </fragment>
+
+</navigation>
