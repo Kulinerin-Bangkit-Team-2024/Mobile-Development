@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_unclick"
+        android:icon="@drawable/ic_home"
         android:title="@string/home" />
     <item android:id="@+id/navigation_foods"
-        android:icon="@drawable/ic_food_unclick"
+        android:icon="@drawable/ic_foods"
         android:title="@string/foods"/>
     <item
         android:title=""/>
     <item android:id="@+id/navigation_restaurants"
-        android:icon="@drawable/ic_restaurant_unclick"
+        android:icon="@drawable/ic_restaurants"
         android:title="@string/resturants"/>
     <item android:id="@+id/navigation_profile"
-        android:icon="@drawable/ic_profile_unclick"
+        android:icon="@drawable/ic_profile_page"
         android:title="@string/profile"/>
 </menu>
