@@ -9,12 +9,14 @@
 
     <style name="Widget.KulinerIn.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
         <item name="android:background">@color/black</item>
-        <item name="android:elevation">8dp</item>
+        <item name="android:elevation">0dp</item>
     </style>
 
-    <style name="fab_3_rounded">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
+    <style name="Widget.KulinerIn.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Large.Primary">
         <item name="backgroundTint">@color/black</item>
+        <item name="elevation">0dp</item>
+        <item name="fabCustomSize">90dp</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Material3.Corner.Full</item>
     </style>
+
 </resources>
