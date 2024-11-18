@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">KulinerIn</string>
+    <string name="home">Home</string>
+    <string name="food">Food</string>
+    <string name="foods">Foods</string>
+    <string name="resturant">Restaurant</string>
+    <string name="resturants">Restaurants</string>
+    <string name="profile">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="floating_action_button">Floating Action Button</string>
 </resources>
