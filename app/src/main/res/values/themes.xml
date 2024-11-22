@@ -3,20 +3,79 @@
     <style name="Base.Theme.KulinerIn" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/light_blue</item>
+        <item name="colorOnPrimary">@color/light_blue</item>
+
+        <item name="colorSecondary">@color/light_blue</item>
+
+        <item name="colorTertiary">@color/light_blue</item>
+
+        <item name="colorPrimaryContainer">@color/light_blue</item>
+        <item name="colorOnPrimaryContainer">@color/light_blue</item>
+
+        <item name="colorSecondaryContainer">@color/white</item>
+        <item name="colorOnSecondaryContainer">@color/light_blue</item>
     </style>
 
+
+
     <style name="Theme.KulinerIn" parent="Base.Theme.KulinerIn" />
-    
+
+
+
+    <!-- STYLE FONT -->
+    <style name="TitleStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#2D4655</item>
+        <item name="android:textSize">32sp</item>
+        <item name="fontFamily">@font/poppins_extrabold</item>
+    </style>
+    <style name="SubtitleStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#2D4655</item>
+        <item name="android:textSize">24sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+    <style name="CaptionStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#2D4655</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+    <!-- STYLE FONT -->
+
+
+    <!-- STYLE FAB & BOTNAV -->
     <style name="Widget.KulinerIn.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
         <item name="android:background">@color/white</item>
         <item name="android:elevation">0dp</item>
     </style>
-
     <style name="Widget.KulinerIn.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Large.Primary">
         <item name="backgroundTint">@color/white</item>
-        <item name="elevation">0dp</item>
+        <item name="elevation">4dp</item>
         <item name="fabCustomSize">90dp</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Material3.Corner.Full</item>
     </style>
+    <!-- STYLE FAB & BOTNAV -->
+
+
+<!--    &lt;!&ndash; STYLE SPLASHSCREEN &ndash;&gt;-->
+<!--    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">-->
+<!--        <item name="android:windowBackground">@drawable/logo_kulinerin</item>-->
+<!--        <item name="android:windowFullscreen">true</item>-->
+<!--        <item name="android:windowNoTitle">true</item>-->
+<!--    </style>-->
+<!--    &lt;!&ndash; STYLE SPLASHSCREEN &ndash;&gt;-->
+
+    <!-- STYLE SEARCHVIEW -->
+    <style name="CustomSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="colorControlNormal">#808080</item> <!-- Warna ikon -->
+        <item name="android:textColor">#000000</item> <!-- Warna teks -->
+        <item name="android:background">#98ECFB</item> <!-- Warna background -->
+    </style>
+    <!-- STYLE SEARCHVIEW -->
 
 </resources>
