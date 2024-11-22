@@ -1,14 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragment.HomeFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"
-        style="@style/TitleStyle"/>
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/riv_user_profile"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        tools:src="@tools:sample/avatars"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:scaleType="fitCenter"
+        app:riv_corner_radius="30dip"
+        app:riv_oval="true"
+        android:layout_marginVertical="16dp"
+        android:layout_marginHorizontal="16dp"/>
 
-</FrameLayout>
+    <LinearLayout
+        android:id="@+id/ll_welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toEndOf="@id/riv_user_profile"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginVertical="24dp"
+        android:layout_marginStart="10dp">
+
+        <TextView
+            android:id="@+id/tv_welcome_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_for_user"
+            style="@style/WelcomeStyle"/>
+
+        <TextView
+            android:id="@+id/tv_first_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/kulinerian"
+            style="@style/WelcomeStyle"
+            android:layout_marginStart="4dp"/>
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_recommendations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/riv_user_profile"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginVertical="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:orientation="horizontal"
+        android:scrollbars="horizontal"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_foods"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/rv_recommendations"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="16dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

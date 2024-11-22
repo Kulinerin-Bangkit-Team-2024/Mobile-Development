@@ -24,4 +24,7 @@
     <string name="food_name">Nama Makanan</string>
     <string name="food_origin">Asal Makanan\n</string>
     <string name="food_description">Deskripsi Makanan</string>
+    <string name="welcome_for_user">Welcome,</string>
+    <string name="kulinerian">Kulinerian!</string>
+    <string name="food_image">Food Image</string>
 </resources>
