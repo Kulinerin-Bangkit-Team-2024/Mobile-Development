@@ -9,4 +9,19 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="floating_action_button">Floating Action Button</string>
+    <string name="username">Username</string>
+    <string name="email">Email</string>
+    <string name="coming_soon">This Feature is Coming Soon</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="logout">Logout</string>
+    <string name="password">Password</string>
+    <string name="dummy_email">johndoe@example.com</string>
+    <string name="name">Name</string>
+    <string name="dummy_name">John Doe</string>
+    <string name="dummy_password">johndoe123</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="food_name">Nama Makanan</string>
+    <string name="food_origin">Asal Makanan\n</string>
+    <string name="food_description">Deskripsi Makanan</string>
 </resources>
