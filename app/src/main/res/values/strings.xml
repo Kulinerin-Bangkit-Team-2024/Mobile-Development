@@ -27,4 +27,6 @@
     <string name="welcome_for_user">Welcome,</string>
     <string name="kulinerian">Kulinerian!</string>
     <string name="food_image">Food Image</string>
+    <string name="food_image_description">Food image.</string>
+    <string name="food_region">Asal Daerah</string>
 </resources>

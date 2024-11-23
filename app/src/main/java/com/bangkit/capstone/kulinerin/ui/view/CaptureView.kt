@@ -14,6 +14,7 @@ class CaptureView : View {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
+        alpha = 128
     }
     private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
@@ -22,18 +23,18 @@ class CaptureView : View {
     private var isTouched = false
 
     constructor(context: Context): super(context) {
-        paint.color = ContextCompat.getColor(context, R.color.white_blue)
-        strokePaint.color = ContextCompat.getColor(context, R.color.white_blue)
+        paint.color = ContextCompat.getColor(context, R.color.white)
+        strokePaint.color = ContextCompat.getColor(context, R.color.white)
     }
 
     constructor(context: Context, attrs: AttributeSet?): super(context, attrs) {
-        paint.color = ContextCompat.getColor(context, R.color.white_blue)
-        strokePaint.color = ContextCompat.getColor(context, R.color.white_blue)
+        paint.color = ContextCompat.getColor(context, R.color.white)
+        strokePaint.color = ContextCompat.getColor(context, R.color.white)
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        paint.color = ContextCompat.getColor(context, R.color.white_blue)
-        strokePaint.color = ContextCompat.getColor(context, R.color.white_blue)
+        paint.color = ContextCompat.getColor(context, R.color.white)
+        strokePaint.color = ContextCompat.getColor(context, R.color.white)
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -44,7 +45,7 @@ class CaptureView : View {
             val radius = min(width, height) / 4f
             it.drawCircle(x, y, radius, paint)
 
-            val strokeRadius = radius + 20f
+            val strokeRadius = radius + 40f
             it.drawCircle(x, y, strokeRadius, strokePaint)
         }
     }
@@ -53,15 +54,15 @@ class CaptureView : View {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 isTouched = true
-                paint.color = ContextCompat.getColor(context, R.color.light_blue)
-                strokePaint.color = ContextCompat.getColor(context, R.color.light_blue)
+                paint.alpha = 255
+                strokePaint.alpha = 255
                 invalidate()
                 performClick()
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 isTouched = false
-                paint.color = ContextCompat.getColor(context, R.color.white_blue)
-                strokePaint.color = ContextCompat.getColor(context, R.color.white_blue)
+                paint.alpha = 128
+                strokePaint.alpha = 128
                 invalidate()
             }
         }
