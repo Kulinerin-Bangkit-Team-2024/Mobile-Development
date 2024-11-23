@@ -7,4 +7,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.ScanActivity">
 
+    <androidx.camera.view.PreviewView
+        android:id="@+id/pv_scan"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.bangkit.capstone.kulinerin.ui.view.CaptureView
+        android:id="@+id/cv_capture_button"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="550dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
