@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
@@ -17,6 +18,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.bangkit.capstone.kulinerin.R
 import com.bangkit.capstone.kulinerin.databinding.ActivityScanBinding
 import java.io.File
 import java.text.SimpleDateFormat
@@ -37,6 +39,8 @@ class ScanActivity : AppCompatActivity() {
         } else {
             requestCameraPermission()
         }
+
+        setLatestGalleryImage()
 
         binding.apply {
             cvCaptureButton.setOnClickListener {
@@ -107,6 +111,42 @@ class ScanActivity : AppCompatActivity() {
         galleryLauncher.launch(intent)
     }
 
+    private fun setLatestGalleryImage() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED) {
+
+            val projection = arrayOf(
+                MediaStore.Images.Media._ID,
+                MediaStore.Images.Media.DATA
+            )
+
+            val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
+            val cursor = contentResolver.query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                projection,
+                null,
+                null,
+                sortOrder
+            )
+
+            cursor?.use {
+                if (it.moveToFirst()) {
+                    val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                    val imagePath = it.getString(columnIndex)
+                    val latestImageUri = Uri.fromFile(File(imagePath))
+
+                    binding.ivGalleryButton.setImageURI(latestImageUri)
+                } else {
+                    binding.ivGalleryButton.setImageResource(R.drawable.ic_insert_photo)
+                }
+            }
+        } else {
+            requestStoragePermission()
+        }
+    }
+
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val selectedImageUri = result.data?.data
@@ -143,6 +183,29 @@ class ScanActivity : AppCompatActivity() {
         )
     }
 
+    private fun requestStoragePermission() {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Toast.makeText(this, "Storage permission is needed to access the gallery.", Toast.LENGTH_LONG).show()
+            }
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                REQUEST_CODE_STORAGE_PERMISSION
+            )
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Toast.makeText(this, "Storage permission is needed to access the gallery.", Toast.LENGTH_LONG).show()
+            }
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                REQUEST_CODE_STORAGE_PERMISSION
+            )
+        }
+    }
+
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -155,10 +218,17 @@ class ScanActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show()
             }
+        } else if (requestCode == REQUEST_CODE_STORAGE_PERMISSION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setLatestGalleryImage()
+            } else {
+                Toast.makeText(this, "Storage permission denied", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
     companion object {
         private const val REQUEST_CODE_CAMERA_PERMISSION = 10
+        private const val REQUEST_CODE_STORAGE_PERMISSION = 11
     }
 }
