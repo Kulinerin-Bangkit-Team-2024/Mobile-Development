@@ -71,4 +71,11 @@ dependencies {
     implementation(libs.androidx.camera.extensions)
 
     implementation(libs.roundedimageview)
+
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.converter.gson)
+    implementation(libs.logging.interceptor)
+
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.exifinterface)
 }

@@ -1,13 +1,12 @@
 package com.bangkit.capstone.kulinerin.ui.activity
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,8 +18,18 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.bangkit.capstone.kulinerin.R
+import com.bangkit.capstone.kulinerin.data.api.ApiConfig
+import com.bangkit.capstone.kulinerin.data.entity.FoodResponseEntity
 import com.bangkit.capstone.kulinerin.databinding.ActivityScanBinding
+import com.google.gson.Gson
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -118,20 +127,64 @@ class ScanActivity : AppCompatActivity() {
         )
     }
 
-    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val selectedImageUri = result.data?.data
-            if (selectedImageUri != null) {
-                sendImageToResult(selectedImageUri)
-            } else {
-                Toast.makeText(this, "No image selected", Toast.LENGTH_SHORT).show()
+    private fun sendImageToResult(uri: Uri) {
+        val file = File(getRealPathFromURI(uri))
+        uploadImage(file, uri)
+    }
+
+    private fun getRealPathFromURI(uri: Uri): String {
+        val cursor = contentResolver.query(uri, null, null, null, null)
+        cursor?.moveToFirst()
+        val idx = cursor?.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+        val path = idx?.let { cursor.getString(it) }
+        cursor?.close()
+        return path ?: ""
+    }
+
+    private fun uploadImage(file: File, uri: Uri) {
+        val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+        val part = MultipartBody.Part.createFormData("file", file.name, requestBody)
+
+        val apiService = ApiConfig.getApiService()
+        val call = apiService.uploadImage(part)
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()?.string()
+                    val foodResponseEntity = parseFoodResponseFromJson(responseBody)
+                    val foodName = foodResponseEntity?.prediction ?: "Unknown"
+                    Log.d("Response", "Response: $foodName")
+                    navigateToResultActivity(uri, foodName)
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    Toast.makeText(this@ScanActivity, "Error: $errorBody", Toast.LENGTH_LONG).show()
+                    Log.d("Error", "Response: $errorBody")
+                }
             }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(this@ScanActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    private fun parseFoodResponseFromJson(json: String?): FoodResponseEntity? {
+        return if (json != null) {
+            try {
+                val gson = Gson()
+                gson.fromJson(json, FoodResponseEntity::class.java)
+            } catch (e: Exception) {
+                null
+            }
+        } else {
+            null
         }
     }
 
-    private fun sendImageToResult(uri: Uri) {
+    private fun navigateToResultActivity(uri: Uri, foodName: String) {
         val intent = Intent(this, ResultActivity::class.java).apply {
             putExtra("image_uri", uri.toString())
+            putExtra("food_name", foodName)
         }
         startActivity(intent)
     }
