@@ -22,6 +22,6 @@ interface ApiService {
     @GET("foods")
     suspend fun getFood(): List<ListFoodResponse>
 
-    @GET("foods/{id}")
-    suspend fun getFoodDetail(@Path("id") id: Int): DetailFoodResponse
+    @GET("foods/{food_id}")
+    suspend fun getFoodDetail(@Path("food_id") id: Int): DetailFoodResponse
 }

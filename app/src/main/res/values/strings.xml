@@ -30,4 +30,5 @@
     <string name="food_image_description">Food image.</string>
     <string name="food_region">Asal Daerah</string>
     <string name="gallery_button">Gallery Button</string>
+    <string name="dark_mode">Dark Mode</string>
 </resources>
