@@ -51,4 +51,3 @@ androidx-exifinterface = { module = "androidx.exifinterface:exifinterface", vers
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
