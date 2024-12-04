@@ -19,10 +19,9 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bangkit.capstone.kulinerin.data.api.ApiConfig
-import com.bangkit.capstone.kulinerin.data.entity.FoodResponseEntity
+import com.bangkit.capstone.kulinerin.data.response.FoodResponseEntity
 import com.bangkit.capstone.kulinerin.databinding.ActivityScanBinding
 import com.google.gson.Gson
-import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody

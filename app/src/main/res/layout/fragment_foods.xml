@@ -15,6 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:queryHint="Search foods..."
+        android:hint="Search foods by name..."
         android:iconifiedByDefault="false"
         style="@style/CustomSearchView"/>
 
@@ -29,7 +30,7 @@
         tools:listitem="@layout/item_food"/>
 
     <ProgressBar
-        android:id="@+id/progress_bar"
+        android:id="@+id/list_food_progress_bar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

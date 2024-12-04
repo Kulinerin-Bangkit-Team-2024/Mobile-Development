@@ -78,4 +78,6 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.exifinterface)
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
 }

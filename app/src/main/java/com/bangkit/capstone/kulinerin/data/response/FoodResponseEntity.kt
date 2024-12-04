@@ -1,4 +1,4 @@
-package com.bangkit.capstone.kulinerin.data.entity
+package com.bangkit.capstone.kulinerin.data.response
 
 data class FoodResponseEntity(
 	val prediction: String? = null,
