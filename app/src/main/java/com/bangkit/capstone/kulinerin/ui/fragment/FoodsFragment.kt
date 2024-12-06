@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bangkit.capstone.kulinerin.data.adapter.FoodAdapter
-import com.bangkit.capstone.kulinerin.data.viewmodel.FoodViewModel
+import com.bangkit.capstone.kulinerin.ui.adapter.FoodAdapter
+import com.bangkit.capstone.kulinerin.ui.viewmodel.FoodViewModel
 import com.bangkit.capstone.kulinerin.databinding.FragmentFoodsBinding
 
 class FoodsFragment : Fragment() {

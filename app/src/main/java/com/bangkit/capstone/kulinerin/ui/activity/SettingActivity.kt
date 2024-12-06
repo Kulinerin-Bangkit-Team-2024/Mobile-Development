@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.bangkit.capstone.kulinerin.R
 import com.bangkit.capstone.kulinerin.data.preference.SettingPreferences
 import com.bangkit.capstone.kulinerin.data.preference.dataStore
-import com.bangkit.capstone.kulinerin.data.viewmodel.SettingViewModel
-import com.bangkit.capstone.kulinerin.data.viewmodel.SettingViewModelFactory
+import com.bangkit.capstone.kulinerin.ui.viewmodel.SettingViewModel
+import com.bangkit.capstone.kulinerin.ui.viewmodel.SettingViewModelFactory
 import com.bangkit.capstone.kulinerin.databinding.ActivitySettingBinding
 import com.google.android.material.switchmaterial.SwitchMaterial
 

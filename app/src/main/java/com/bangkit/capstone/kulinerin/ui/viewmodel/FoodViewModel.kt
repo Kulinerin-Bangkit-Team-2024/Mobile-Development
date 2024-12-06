@@ -1,4 +1,4 @@
-package com.bangkit.capstone.kulinerin.data.viewmodel
+package com.bangkit.capstone.kulinerin.ui.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.LiveData
