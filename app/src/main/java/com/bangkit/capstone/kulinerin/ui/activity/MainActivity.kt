@@ -11,8 +11,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.bangkit.capstone.kulinerin.R
 import com.bangkit.capstone.kulinerin.data.preference.SettingPreferences
 import com.bangkit.capstone.kulinerin.data.preference.dataStore
-import com.bangkit.capstone.kulinerin.data.viewmodel.SettingViewModel
-import com.bangkit.capstone.kulinerin.data.viewmodel.SettingViewModelFactory
+import com.bangkit.capstone.kulinerin.ui.viewmodel.SettingViewModel
+import com.bangkit.capstone.kulinerin.ui.viewmodel.SettingViewModelFactory
 import com.bangkit.capstone.kulinerin.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -38,7 +38,8 @@ class MainActivity : AppCompatActivity() {
 
         //DarkMode
         val pref = SettingPreferences.getInstance(application.dataStore)
-        settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref)).get(SettingViewModel::class.java)
+        settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref)).get(
+            SettingViewModel::class.java)
 
         settingViewModel.getThemeSettings().observe(this, Observer { isDarkModeActive ->
             if (isDarkModeActive) {
