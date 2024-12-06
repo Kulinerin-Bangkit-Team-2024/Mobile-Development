@@ -10,7 +10,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.bangkit.capstone.kulinerin.R
 import com.bangkit.capstone.kulinerin.data.preference.SettingPreferences
-import com.bangkit.capstone.kulinerin.data.preference.dataStore
+import com.bangkit.capstone.kulinerin.data.preference.settingDataStore
 import com.bangkit.capstone.kulinerin.ui.viewmodel.SettingViewModel
 import com.bangkit.capstone.kulinerin.ui.viewmodel.SettingViewModelFactory
 import com.bangkit.capstone.kulinerin.databinding.ActivityMainBinding
@@ -37,9 +37,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         //DarkMode
-        val pref = SettingPreferences.getInstance(application.dataStore)
-        settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref)).get(
-            SettingViewModel::class.java)
+        val pref = SettingPreferences.getInstance(application.settingDataStore)
+        settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref))[SettingViewModel::class.java]
 
         settingViewModel.getThemeSettings().observe(this, Observer { isDarkModeActive ->
             if (isDarkModeActive) {

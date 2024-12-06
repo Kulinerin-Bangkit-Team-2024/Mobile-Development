@@ -17,15 +17,15 @@ class SplashScreenActivity : AppCompatActivity() {
 
         val splashTime: Long = 2000
         window.decorView.postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, WelcomeActivity::class.java))
             finish()
         }, splashTime)
     }
 
-    override fun finish() {
-        super.finish()
-//        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-    }
+//    override fun finish() {
+//        super.finish()
+////        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+//    }
 }
 
 //note: splashscreen yg ini nggajadi kepake, jadinya make welcomeactivity

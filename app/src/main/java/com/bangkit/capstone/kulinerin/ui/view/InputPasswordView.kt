@@ -88,7 +88,7 @@ class InputPasswordView @JvmOverloads constructor(
         binding.etInput.setText(password)
     }
 
-    fun setErrorMessage(errorMessage: String?) {
+    fun setError(errorMessage: String?) {
         binding.etInput.error = errorMessage
     }
 }

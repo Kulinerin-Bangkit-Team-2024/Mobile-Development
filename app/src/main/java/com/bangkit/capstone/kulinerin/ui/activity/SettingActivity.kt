@@ -5,12 +5,10 @@ import android.widget.CompoundButton
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bangkit.capstone.kulinerin.R
 import com.bangkit.capstone.kulinerin.data.preference.SettingPreferences
-import com.bangkit.capstone.kulinerin.data.preference.dataStore
+import com.bangkit.capstone.kulinerin.data.preference.settingDataStore
 import com.bangkit.capstone.kulinerin.ui.viewmodel.SettingViewModel
 import com.bangkit.capstone.kulinerin.ui.viewmodel.SettingViewModelFactory
 import com.bangkit.capstone.kulinerin.databinding.ActivitySettingBinding
@@ -28,7 +26,7 @@ class SettingActivity : AppCompatActivity() {
 
         val switchTheme = findViewById<SwitchMaterial>(R.id.switch_theme)
 
-        val pref = SettingPreferences.getInstance(application.dataStore)
+        val pref = SettingPreferences.getInstance(application.settingDataStore)
         val settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref)).get(
             SettingViewModel::class.java
         )
