@@ -31,4 +31,8 @@
     <string name="food_region">Asal Daerah</string>
     <string name="gallery_button">Gallery Button</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="error_invalid_email">Please input a valid email address</string>
+    <string name="error_invalid_name">Please input a valid name</string>
+    <string name="error_password_to_short">Password is less than 8 characters</string>
+    <string name="go_to_register">Don\'t have an account? Let\'s log in</string>
 </resources>

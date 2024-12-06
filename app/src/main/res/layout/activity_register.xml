@@ -12,10 +12,10 @@
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="48dp"
         android:src="@drawable/ic_back"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/register_image"
@@ -37,34 +37,21 @@
         android:layout_marginEnd="16dp"
         android:text="@string/name"
         tools:layout_editor_absoluteX="0dp"
+        android:textColor="@color/dark_blue"
         app:layout_constraintTop_toBottomOf="@id/register_image" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_name"
+
+    <com.bangkit.capstone.kulinerin.ui.view.InputNameView
+        android:id="@+id/ed_input_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:boxStrokeColor="@android:color/darker_gray"
-        app:boxBackgroundColor="@android:color/white"
-        app:hintEnabled="true"
-        app:hintAnimationEnabled="true"
-        app:boxStrokeWidth="1dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_display_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginVertical="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_display_name"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tv_name_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/dummy_name"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:gravity="center_vertical" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/tv_display_email"
@@ -75,35 +62,19 @@
         android:layout_marginEnd="16dp"
         android:text="@string/email"
         tools:layout_editor_absoluteX="0dp"
-        app:layout_constraintTop_toBottomOf="@id/input_layout_name" />
+        android:textColor="@color/dark_blue"
+        app:layout_constraintTop_toBottomOf="@id/ed_input_name" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_email"
+    <com.bangkit.capstone.kulinerin.ui.view.InputEmailView
+        android:id="@+id/ed_input_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:boxStrokeColor="@android:color/darker_gray"
-        app:boxBackgroundColor="@android:color/white"
-        app:hintEnabled="true"
-        app:hintAnimationEnabled="true"
-        app:boxStrokeWidth="1dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_display_email"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tv_email_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/dummy_email"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:gravity="center_vertical" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginVertical="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_display_email"/>
 
     <TextView
         android:id="@+id/tv_display_password"
@@ -113,77 +84,26 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:text="@string/password"
-        app:layout_constraintTop_toBottomOf="@+id/input_layout_email"
+        app:layout_constraintTop_toBottomOf="@+id/ed_input_email"
+        android:textColor="@color/dark_blue"
         tools:layout_editor_absoluteX="0dp" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_password"
+    <com.bangkit.capstone.kulinerin.ui.view.InputPasswordView
+        android:id="@+id/ed_input_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:boxBackgroundColor="@android:color/white"
-        app:boxStrokeColor="@android:color/darker_gray"
-        app:boxStrokeWidth="1dp"
-        app:hintAnimationEnabled="true"
-        app:hintEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_display_password">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tv_password_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:gravity="center_vertical"
-            android:text="@string/dummy_password"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <TextView
-        android:id="@+id/tv_display_confirm_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginVertical="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/confirm_password"
-        app:layout_constraintTop_toBottomOf="@+id/input_layout_password"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_confirm_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:boxBackgroundColor="@android:color/white"
-        app:boxStrokeColor="@android:color/darker_gray"
-        app:boxStrokeWidth="1dp"
-        app:hintAnimationEnabled="true"
-        app:hintEnabled="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_display_confirm_password">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tv_confirm_password_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:gravity="center_vertical"
-            android:text="@string/dummy_password"
-            android:textColor="@android:color/black"
-            android:textSize="18sp" />
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toBottomOf="@id/tv_display_password"/>
 
     <Button
         android:id="@+id/btn_register"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/input_layout_confirm_password"
+        app:layout_constraintTop_toBottomOf="@id/ed_input_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="72dp"

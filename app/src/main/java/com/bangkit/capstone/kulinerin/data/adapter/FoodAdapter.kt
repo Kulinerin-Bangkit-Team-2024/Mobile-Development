@@ -7,7 +7,10 @@ import com.bangkit.capstone.kulinerin.data.response.FoodsItem
 import com.bangkit.capstone.kulinerin.databinding.ItemFoodBinding
 import com.bumptech.glide.Glide
 
-class FoodAdapter(private val foodList: List<FoodsItem>) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
+class FoodAdapter(
+    private val foodList: List<FoodsItem>
+
+) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
     inner class FoodViewHolder(private val binding: ItemFoodBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(foods: FoodsItem) {
