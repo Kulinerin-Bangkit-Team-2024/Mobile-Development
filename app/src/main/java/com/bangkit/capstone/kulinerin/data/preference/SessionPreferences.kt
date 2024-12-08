@@ -15,18 +15,22 @@ class SessionPreferences private constructor(private val dataStore: DataStore<Pr
 
     fun getToken(): Flow<String> {
         return dataStore.data.map { preferences ->
-            preferences[TOKEN_KEY] ?: ""
+            preferences[TOKEN_KEY].toString()
         }
     }
 
-    suspend fun saveToken(token: String) {
+    suspend fun saveToken(token: String?) {
         dataStore.edit { preferences ->
-            preferences[TOKEN_KEY] = token
+            if (token != null) {
+                preferences[TOKEN_KEY] = token
+            } else {
+                preferences.remove(TOKEN_KEY)
+            }
         }
     }
 
     companion object {
-        private val TOKEN_KEY = stringPreferencesKey("auth_token")
+        private val TOKEN_KEY = stringPreferencesKey("token")
 
         @Volatile
         private var INSTANCE: SessionPreferences? = null

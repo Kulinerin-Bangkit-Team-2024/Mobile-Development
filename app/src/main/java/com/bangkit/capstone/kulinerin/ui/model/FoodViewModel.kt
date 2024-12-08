@@ -1,12 +1,10 @@
-package com.bangkit.capstone.kulinerin.ui.viewmodel
+package com.bangkit.capstone.kulinerin.ui.model
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bangkit.capstone.kulinerin.data.api.ApiConfig
-import com.bangkit.capstone.kulinerin.data.api.ApiService
 import com.bangkit.capstone.kulinerin.data.response.FoodsItem
 import kotlinx.coroutines.launch
 import retrofit2.HttpException

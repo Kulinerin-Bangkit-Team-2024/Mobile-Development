@@ -2,16 +2,14 @@ package com.bangkit.capstone.kulinerin.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.bangkit.capstone.kulinerin.R
 import com.bangkit.capstone.kulinerin.data.api.ApiConfig
 import com.bangkit.capstone.kulinerin.data.response.RegisterResponse
 import com.bangkit.capstone.kulinerin.databinding.ActivityRegisterBinding
+import com.bangkit.capstone.kulinerin.ui.model.AccountViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,12 +18,23 @@ import java.util.regex.Pattern
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
+    private val accountViewModel: AccountViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        accountViewModel.name.observe(this) { name ->
+            binding.edInputName.setName(name)
+        }
+        accountViewModel.email.observe(this) { email ->
+            binding.edInputEmail.setEmail(email)
+        }
+        accountViewModel.password.observe(this) { password ->
+            binding.edInputPassword.setPassword(password)
+        }
 
         binding.btnRegister.setOnClickListener {
             val name = binding.edInputName.getName()
@@ -36,26 +45,29 @@ class RegisterActivity : AppCompatActivity() {
             binding.edInputEmail.setError(null)
             binding.edInputPassword.setError(null)
 
+            accountViewModel.setName(name)
+            accountViewModel.setEmail(email)
+            accountViewModel.setPassword(password)
+
             if (name.isEmpty()) {
                 binding.edInputName.setError("Name is empty.")
-            }
-            if (email.isEmpty()) {
+            } else if (email.isEmpty()) {
                 binding.edInputEmail.setError("Email is empty.")
-            }
-            if (password.isEmpty()) {
+            } else if (!isValidEmail(email)) {
+                binding.edInputEmail.setError("Invalid email format.")
+            } else if (password.isEmpty()) {
                 binding.edInputPassword.setError("Password is empty.")
-            }
-
-            if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
-                if (isValidEmail(email) && isValidPassword(password)) {
-                    registerUser(name, email, password)
-                }
+            } else if (!isValidPassword(password)) {
+                binding.edInputPassword.setError("Password must be at least 8 characters.")
+            } else {
+                registerUser(name, email, password)
             }
         }
 
         binding.backIcon.setOnClickListener {
             val intent = Intent(this, WelcomeActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 
@@ -63,21 +75,11 @@ class RegisterActivity : AppCompatActivity() {
         val emailPattern = Pattern.compile(
             "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
         )
-        return if (!emailPattern.matcher(email).matches()) {
-            binding.edInputEmail.setError("Invalid email format")
-            false
-        } else {
-            true
-        }
+        return emailPattern.matcher(email).matches()
     }
 
     private fun isValidPassword(password: String): Boolean {
-        return if (password.length < 8) {
-            binding.edInputPassword.setError("Password must be at least 8 characters")
-            false
-        } else {
-            true
-        }
+        return password.length >= 8
     }
 
     private fun registerUser(name: String, email: String, password: String) {
@@ -91,16 +93,17 @@ class RegisterActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     val registerResponse = response.body()
-                    if (registerResponse != null) {
+                    if (registerResponse != null && registerResponse.status == "success") {
                         Toast.makeText(
                             this@RegisterActivity,
                             "Registration successful!",
                             Toast.LENGTH_SHORT
                         ).show()
 
-                        val intent = Intent(this@RegisterActivity, LoginActivity::class.java).apply {
-                            putExtra("email", email)
-                        }
+                        val intent =
+                            Intent(this@RegisterActivity, LoginActivity::class.java).apply {
+                                putExtra("email", email)
+                            }
                         startActivity(intent)
                         finish()
                     }

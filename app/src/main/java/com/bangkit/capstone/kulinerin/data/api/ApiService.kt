@@ -1,5 +1,6 @@
 package com.bangkit.capstone.kulinerin.data.api
 
+import com.bangkit.capstone.kulinerin.data.response.CheckTokenResponse
 import com.bangkit.capstone.kulinerin.data.response.DetailFoodResponse
 import com.bangkit.capstone.kulinerin.data.response.ListFoodResponse
 import com.bangkit.capstone.kulinerin.data.response.LogInResponse
@@ -9,6 +10,7 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -18,6 +20,7 @@ import retrofit2.http.Path
 
 interface ApiService {
     // Auth
+    @FormUrlEncoded
     @POST("register")
     fun register(
         @Field("name") name: String,
@@ -25,6 +28,7 @@ interface ApiService {
         @Field("pass") password: String
     ): Call<RegisterResponse>
 
+    @FormUrlEncoded
     @POST("login")
     fun login(
         @Field("email") email: String,
@@ -35,6 +39,11 @@ interface ApiService {
     fun logout(
         @Header("Authorization") token: String
     ): Call<LogOutResponse>
+
+    @GET("check-token")
+    fun checkToken(
+        @Header("Authorization") token: String
+    ): Call<CheckTokenResponse>
 
     // Food
     @Multipart

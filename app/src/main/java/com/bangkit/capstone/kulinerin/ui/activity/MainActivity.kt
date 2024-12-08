@@ -11,8 +11,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.bangkit.capstone.kulinerin.R
 import com.bangkit.capstone.kulinerin.data.preference.SettingPreferences
 import com.bangkit.capstone.kulinerin.data.preference.settingDataStore
-import com.bangkit.capstone.kulinerin.ui.viewmodel.SettingViewModel
-import com.bangkit.capstone.kulinerin.ui.viewmodel.SettingViewModelFactory
+import com.bangkit.capstone.kulinerin.ui.model.SettingViewModel
+import com.bangkit.capstone.kulinerin.ui.model.SettingViewModelFactory
 import com.bangkit.capstone.kulinerin.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
