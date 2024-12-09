@@ -46,12 +46,12 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<CheckTokenResponse>
 
-    // Food
+    // Foods
     @Multipart
     @POST("foods/predict")
     fun uploadImage(
         @Header("Authorization") token: String,
-        @Part file: MultipartBody.Part
+        @Part image: MultipartBody.Part
     ): Call<ScanFoodResponse>
 
     @GET("foods")

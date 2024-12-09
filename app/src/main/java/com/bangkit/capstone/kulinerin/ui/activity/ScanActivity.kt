@@ -46,8 +46,6 @@ class ScanActivity : AppCompatActivity() {
         Log.d("ScanActivity", "Photo picker result: ${uri?.toString() ?: "No media selected"}")
         if (uri != null) {
             sendImageToResult(uri)
-        } else {
-            Log.d("ScanActivity", "No media selected")
         }
     }
 
@@ -162,14 +160,29 @@ class ScanActivity : AppCompatActivity() {
     private fun uriToFile(uri: Uri): File? {
         return try {
             val contentResolver = this.contentResolver
-            val tempFile = File.createTempFile("temp_image", ".jpeg", cacheDir)
+            val mimeType = contentResolver.getType(uri)
 
-            contentResolver.openInputStream(uri)?.use { inputStream ->
-                tempFile.outputStream().use { outputStream ->
-                    inputStream.copyTo(outputStream)
+            Log.d("ScanActivity", "MIME type: $mimeType")
+
+            if (mimeType != null && mimeType.startsWith("image")) {
+                val fileExtension = when (mimeType) {
+                    "image/png" -> ".png"
+                    "image/jpeg" -> ".jpeg"
+                    else -> ".jpg"
                 }
+
+                val tempFile = File.createTempFile("temp_image", fileExtension, cacheDir)
+
+                contentResolver.openInputStream(uri)?.use { inputStream ->
+                    tempFile.outputStream().use { outputStream ->
+                        inputStream.copyTo(outputStream)
+                    }
+                }
+                tempFile
+            } else {
+                Log.e("ScanActivity", "Invalid MIME type: $mimeType")
+                null
             }
-            tempFile
         } catch (e: Exception) {
             Log.e("ScanActivity", "Error converting URI to File", e)
             null
@@ -178,14 +191,18 @@ class ScanActivity : AppCompatActivity() {
 
     private fun uploadImage(file: File, uri: Uri) {
         Log.d("ScanActivity", "Uploading image: ${file.absolutePath}")
+
+        val mimeType = contentResolver.getType(uri) ?: "image/jpeg"
+        Log.d("ScanActivity", "MIME Type: $mimeType")
+
         val token = runBlocking {
             sessionPreferences.getToken().first().also {
                 Log.d("ScanActivity", "Token retrieved: $it")
             }
         }
 
-        val requestBody = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
-        val part = MultipartBody.Part.createFormData("file", file.name, requestBody)
+        val requestBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
+        val part = MultipartBody.Part.createFormData("image", file.name, requestBody)
 
         val apiService = ApiConfig.getApiService()
         val call = apiService.uploadImage("Bearer $token", part)
@@ -195,16 +212,20 @@ class ScanActivity : AppCompatActivity() {
                     val responseBody = response.body()
                     Log.d("ScanActivity", "Response successful: $responseBody")
                     if (responseBody != null) {
-                        val foodName = responseBody.queryResult[0].foodName
-                        val foodDescription = responseBody.queryResult[0].description
+                        // Perbarui untuk mengakses queryResult melalui data -> queryResult
+                        val foodName = responseBody.data.queryResult[0].foodName
+                        val foodDescription = responseBody.data.queryResult[0].description
                         navigateToResultActivity(uri, foodName, foodDescription)
                     } else {
                         Log.d("ScanActivity", "Empty response body")
                         Toast.makeText(this@ScanActivity, "Error: ${response.message()}", Toast.LENGTH_LONG).show()
                     }
                 } else {
-                    val responseBody = response.body()
-                    Log.d("ScanActivity", "Response error: ${response.code()} - ${response.message()} - ${responseBody?.queryResult?.get(0)}")
+                    if (response.code() == 500) {
+                        Log.d("ScanActivity", "Server Error 500: ${response.message()} - ${response.body()}")
+                    } else {
+                        Log.d("ScanActivity", "Response error: ${response.code()} - ${response.message()} - ${response.body()}")
+                    }
                 }
             }
 
@@ -215,10 +236,11 @@ class ScanActivity : AppCompatActivity() {
         })
     }
 
+
     private fun navigateToResultActivity(uri: Uri, foodName: String, foodDescription: String) {
         Log.d("ScanActivity", "Navigating to result activity")
         val intent = Intent(this, ResultActivity::class.java).apply {
-            putExtra("EXTRA_URI", uri)
+            putExtra("EXTRA_URI", uri.toString())
             putExtra("EXTRA_FOOD_NAME", foodName)
             putExtra("EXTRA_FOOD_DESCRIPTION", foodDescription)
         }
@@ -246,16 +268,12 @@ class ScanActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d("ScanActivity", "Permissions result: requestCode=$requestCode, grantResults=${grantResults.joinToString()}")
+        Log.d("ScanActivity", "onRequestPermissionsResult called for requestCode $requestCode")
         if (requestCode == REQUEST_CODE_CAMERA_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startCamera()
             } else {
-                Toast.makeText(
-                    this,
-                    "Camera permission is required to use the camera",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, "Camera permission is required to use the camera", Toast.LENGTH_SHORT).show()
             }
         }
     }
