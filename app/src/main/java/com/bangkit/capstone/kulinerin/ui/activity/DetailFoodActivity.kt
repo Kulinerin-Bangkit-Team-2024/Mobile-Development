@@ -44,7 +44,6 @@ class DetailFoodActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.VISIBLE
         val token = "Bearer ${getTokenFromSession()}"
         val apiService = ApiConfig.getApiService()
-//        val call = apiService.getFoodDetail(token, foodId)
 
         apiService.getFoodDetail(token, foodId).enqueue(object : Callback<DetailFoodResponse> {
             override fun onResponse(call: Call<DetailFoodResponse>, response: Response<DetailFoodResponse>) {

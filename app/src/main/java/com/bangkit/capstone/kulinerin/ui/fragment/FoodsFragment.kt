@@ -2,14 +2,11 @@ package com.bangkit.capstone.kulinerin.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bangkit.capstone.kulinerin.data.api.ApiConfig
@@ -19,7 +16,6 @@ import com.bangkit.capstone.kulinerin.data.response.ListFoodResponse
 import com.bangkit.capstone.kulinerin.ui.adapter.FoodAdapter
 import com.bangkit.capstone.kulinerin.databinding.FragmentFoodsBinding
 import com.bangkit.capstone.kulinerin.ui.activity.DetailFoodActivity
-import com.bangkit.capstone.kulinerin.ui.activity.LoginActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import retrofit2.Call
