@@ -11,6 +11,7 @@ import com.bangkit.capstone.kulinerin.data.api.ApiConfig
 import com.bangkit.capstone.kulinerin.data.preference.SessionPreferences
 import com.bangkit.capstone.kulinerin.data.preference.sessionDataStore
 import com.bangkit.capstone.kulinerin.data.response.LogOutResponse
+import com.bangkit.capstone.kulinerin.data.response.UserProfileResponse
 import com.bangkit.capstone.kulinerin.databinding.FragmentProfileBinding
 import com.bangkit.capstone.kulinerin.ui.activity.SettingActivity
 import com.bangkit.capstone.kulinerin.ui.activity.WelcomeActivity
@@ -48,6 +49,41 @@ class ProfileFragment : Fragment() {
                 logoutUser()
             }
         }
+
+        loadUserData()
+    }
+
+    private fun loadUserData() {
+        val token = runBlocking {
+            sessionPreferences.getToken().first()
+        }
+        val bearerToken = "Bearer $token"
+
+        val apiService = ApiConfig.getApiService()
+        val call = apiService.getUserProfile(bearerToken)
+
+        call.enqueue(object : Callback<UserProfileResponse> {
+            override fun onResponse(
+                call: Call<UserProfileResponse>,
+                response: Response<UserProfileResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val userProfile = response.body()
+                    if (userProfile != null) {
+                        binding.pvUsername.setName(userProfile.user.name)
+                        binding.pvEmail.setEmail(userProfile.user.email)
+                    } else {
+                        Toast.makeText(requireContext(), "Failed to load user data", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<UserProfileResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun logoutUser() {

@@ -7,6 +7,7 @@ import com.bangkit.capstone.kulinerin.data.response.LogInResponse
 import com.bangkit.capstone.kulinerin.data.response.LogOutResponse
 import com.bangkit.capstone.kulinerin.data.response.RegisterResponse
 import com.bangkit.capstone.kulinerin.data.response.ScanFoodResponse
+import com.bangkit.capstone.kulinerin.data.response.UserProfileResponse
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Field
@@ -64,6 +65,7 @@ interface ApiService {
         @Path("food_id") id: Int
     ): Call<DetailFoodResponse>
 
-//    @GET("foods/{food_id}")
-//    suspend fun getFoodDetail(@Path("food_id") id: Int): DetailFoodResponse
+    @GET("user/profile")
+    fun getUserProfile(@Header("Authorization") token: String
+    ): Call<UserProfileResponse>
 }

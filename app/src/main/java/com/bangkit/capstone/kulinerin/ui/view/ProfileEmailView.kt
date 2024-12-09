@@ -26,4 +26,8 @@ class ProfileEmailView @JvmOverloads constructor(
             )
         }
     }
+
+    fun setEmail(text: String) {
+        binding.tvProfile.text = text
+    }
 }

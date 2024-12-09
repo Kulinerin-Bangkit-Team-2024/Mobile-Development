@@ -18,7 +18,7 @@ class ProfileNameView @JvmOverloads constructor(
 
     init {
         binding.tvProfile.apply {
-            hint = context.getString(R.string.username)
+            hint = ""
             setCompoundDrawablesWithIntrinsicBounds(
                 R.drawable.ic_person_db,
                 0,
@@ -26,5 +26,9 @@ class ProfileNameView @JvmOverloads constructor(
                 0
             )
         }
+    }
+
+    fun setName(text: String) {
+        binding.tvProfile.text = text
     }
 }
