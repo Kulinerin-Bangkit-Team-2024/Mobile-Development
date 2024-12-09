@@ -27,10 +27,10 @@ class FoodViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 Log.d("FoodViewModel", "Making API call to fetch food list.")
-                val response = ApiConfig.getApiService().getFood("Bearer $token")
-                Log.d("FoodViewModel", "API response received with ${response[0].foods.size} items.")
-                if (response.isNotEmpty() && response[0].foods.isNotEmpty()) {
-                    _food.value = response[0].foods
+                val call = ApiConfig.getApiService().getFood("Bearer $token")
+                Log.d("FoodViewModel", "API response received with ${call[0].foods.size} items.")
+                if (call.isNotEmpty() && call[0].foods.isNotEmpty()) {
+                    _food.value = call[0].foods
                 } else {
                     _errorMessage.value = "No food data found."
                     Log.e("FoodViewModel", "No food data found in API response.")
