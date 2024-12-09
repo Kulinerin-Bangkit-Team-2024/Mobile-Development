@@ -53,7 +53,9 @@ interface ApiService {
     ): Call<ResponseBody> //ImageUploadResponse
 
     @GET("foods")
-    suspend fun getFood(): List<ListFoodResponse>
+    suspend fun getFood(
+        @Header("Authorization") token: String
+    ): List<ListFoodResponse>
 
     @GET("foods/{food_id}")
     suspend fun getFoodDetail(@Path("food_id") id: Int): DetailFoodResponse

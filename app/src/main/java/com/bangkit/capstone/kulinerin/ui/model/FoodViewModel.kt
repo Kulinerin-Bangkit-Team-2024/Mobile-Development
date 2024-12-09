@@ -1,5 +1,6 @@
 package com.bangkit.capstone.kulinerin.ui.model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,15 +21,19 @@ class FoodViewModel : ViewModel() {
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> = _errorMessage
 
-    fun fetchFoodList() {
+    fun fetchFoodList(token: String) {
+        Log.d("FoodViewModel", "Fetching food list started.")
         _isLoading.value = true
         viewModelScope.launch {
             try {
-                val response = ApiConfig.getApiService().getFood()
-                if (response.isNotEmpty()) {
+                Log.d("FoodViewModel", "Making API call to fetch food list.")
+                val response = ApiConfig.getApiService().getFood("Bearer $token")
+                Log.d("FoodViewModel", "API response received with ${response[0].foods.size} items.")
+                if (response.isNotEmpty() && response[0].foods.isNotEmpty()) {
                     _food.value = response[0].foods
                 } else {
                     _errorMessage.value = "No food data found."
+                    Log.e("FoodViewModel", "No food data found in API response.")
                 }
             } catch (e: HttpException) {
                 _errorMessage.value = "Failed to fetch data: ${e.message}"
@@ -36,6 +41,7 @@ class FoodViewModel : ViewModel() {
                 _errorMessage.value = "An unexpected error occurred: ${e.message}"
             } finally {
                 _isLoading.value = false
+                Log.d("FoodViewModel", "Fetching food list ended.")
             }
         }
     }

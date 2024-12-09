@@ -1,6 +1,8 @@
 package com.bangkit.capstone.kulinerin.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +10,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bangkit.capstone.kulinerin.data.preference.SessionPreferences
 import com.bangkit.capstone.kulinerin.ui.adapter.FoodAdapter
 import com.bangkit.capstone.kulinerin.ui.model.FoodViewModel
 import com.bangkit.capstone.kulinerin.databinding.FragmentFoodsBinding
+import com.bangkit.capstone.kulinerin.ui.activity.LoginActivity
 
 class FoodsFragment : Fragment() {
 
@@ -35,7 +39,12 @@ class FoodsFragment : Fragment() {
         binding.rvFoods.layoutManager = LinearLayoutManager(requireContext())
 
         foodViewModel.food.observe(viewLifecycleOwner) { foods ->
-            adapter.notifyDataSetChanged()
+            if (foods != null) {
+                Log.d("FoodsFragment", "Food list updated with ${foods.size} items.")
+                adapter.updateData(foods)
+            } else {
+                Log.d("FoodsFragment", "Food list is null.")
+            }
         }
 
         foodViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -44,11 +53,12 @@ class FoodsFragment : Fragment() {
 
         foodViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
             if (message != null) {
+                Log.e("FoodsFragment", "Error message received: $message")
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         }
 
-        foodViewModel.fetchFoodList()
+        foodViewModel.fetchFoodList("your_token_here")
     }
 
     override fun onDestroyView() {
