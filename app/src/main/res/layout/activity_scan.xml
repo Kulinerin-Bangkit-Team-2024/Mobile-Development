@@ -35,7 +35,10 @@
     <ImageView
         android:id="@+id/iv_gallery_button"
         android:layout_width="47dp"
-        android:layout_height="43dp"
+        android:layout_height="47dp"
+        android:maxWidth="47dp"
+        android:maxHeight="47dp"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/gallery_button"
         android:src="@drawable/ic_insert_photo"
         app:layout_constraintBottom_toBottomOf="@id/gv_gallery_button"
