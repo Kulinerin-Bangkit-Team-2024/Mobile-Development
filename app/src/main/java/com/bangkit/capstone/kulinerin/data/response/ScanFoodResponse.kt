@@ -16,6 +16,9 @@ data class QueryResultItem(
 	@field:SerializedName("food_name")
 	val foodName: String,
 
+	@field:SerializedName("place_of_origin")
+	val placeOfOrigin: String,
+
 	@field:SerializedName("description")
 	val description: String,
 

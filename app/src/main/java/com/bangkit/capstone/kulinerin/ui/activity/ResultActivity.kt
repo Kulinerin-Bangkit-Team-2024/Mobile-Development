@@ -17,11 +17,13 @@ class ResultActivity : AppCompatActivity() {
 
         val imageUriString = intent.getStringExtra("EXTRA_URI")
         val foodName = intent.getStringExtra("EXTRA_FOOD_NAME") ?: "Unknown"
+        val foodOrigin = intent.getStringExtra("EXTRA_FOOD_ORIGIN") ?: "Unknown"
         val foodDescription = intent.getStringExtra("EXTRA_FOOD_DESCRIPTION") ?: "Unknown"
         imageUri = Uri.parse(imageUriString)
 
         binding.ivResult.setImageURI(imageUri)
         binding.tvFoodName.text = foodName
+        binding.tvFoodRegion.text = foodOrigin
         binding.tvFoodDescription.text = foodDescription
 
 //        TODO: Buat back button mengarah ke MainActivity.

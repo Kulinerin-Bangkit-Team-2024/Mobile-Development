@@ -20,12 +20,13 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
+        style="@style/Widget.KulinerIn.BottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_gravity="bottom"
-        app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="unlabeled"
-        style="@style/Widget.KulinerIn.BottomNavigationView"/>
+        app:layout_constraintTop_toBottomOf="@id/nav_host_fragment_activity_main"
+        app:menu="@menu/bottom_nav_menu" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_scan"

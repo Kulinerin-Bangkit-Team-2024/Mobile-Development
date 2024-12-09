@@ -8,7 +8,6 @@ import com.bangkit.capstone.kulinerin.data.response.LogOutResponse
 import com.bangkit.capstone.kulinerin.data.response.RegisterResponse
 import com.bangkit.capstone.kulinerin.data.response.ScanFoodResponse
 import okhttp3.MultipartBody
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -55,9 +54,9 @@ interface ApiService {
     ): Call<ScanFoodResponse>
 
     @GET("foods")
-    suspend fun getFood(
+    fun getFood(
         @Header("Authorization") token: String
-    ): List<ListFoodResponse>
+    ): Call<ListFoodResponse>
 
     @GET("foods/{food_id}")
     suspend fun getFoodDetail(@Path("food_id") id: Int): DetailFoodResponse

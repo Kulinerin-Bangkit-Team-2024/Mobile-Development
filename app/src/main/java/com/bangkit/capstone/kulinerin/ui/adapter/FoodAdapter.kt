@@ -1,6 +1,5 @@
 package com.bangkit.capstone.kulinerin.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,16 +7,17 @@ import com.bangkit.capstone.kulinerin.data.response.FoodsItem
 import com.bangkit.capstone.kulinerin.databinding.ItemFoodBinding
 import com.bumptech.glide.Glide
 
-class FoodAdapter(private var foodList: List<FoodsItem>) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
+class FoodAdapter : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
+
+    private val foodList = ArrayList<FoodsItem>()
 
     inner class FoodViewHolder(private val binding: ItemFoodBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(foods: FoodsItem) {
-            Log.d("FoodAdapter", "Binding food item: ${foods.foodName}")
+        fun bind(food: FoodsItem) {
             binding.apply {
-                tvFoodName.text = foods.foodName
-                tvFoodOrigin.text = foods.placeOfOrigin
+                tvFoodName.text = food.foodName
+                tvFoodOrigin.text = food.placeOfOrigin
                 Glide.with(itemView.context)
-                    .load(foods.foodImage)
+                    .load(food.foodImage)
                     .into(imgFoodCover)
             }
         }
@@ -32,14 +32,11 @@ class FoodAdapter(private var foodList: List<FoodsItem>) : RecyclerView.Adapter<
         holder.bind(foodList[position])
     }
 
-    override fun getItemCount(): Int {
-        Log.d("FoodAdapter", "getItemCount called. Size: ${foodList.size}")
-        return foodList.size
-    }
+    override fun getItemCount(): Int = foodList.size
 
-    fun updateData(newFoodList: List<FoodsItem>) {
-        foodList = newFoodList
+    fun setData(newFoodList: List<FoodsItem>) {
+        foodList.clear()
+        foodList.addAll(newFoodList)
         notifyDataSetChanged()
-
     }
 }

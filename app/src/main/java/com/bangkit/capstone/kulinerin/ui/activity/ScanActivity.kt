@@ -214,8 +214,9 @@ class ScanActivity : AppCompatActivity() {
                     if (responseBody != null) {
                         // Perbarui untuk mengakses queryResult melalui data -> queryResult
                         val foodName = responseBody.data.queryResult[0].foodName
+                        val placeOfOrigin = responseBody.data.queryResult[0].placeOfOrigin
                         val foodDescription = responseBody.data.queryResult[0].description
-                        navigateToResultActivity(uri, foodName, foodDescription)
+                        navigateToResultActivity(uri, foodName, placeOfOrigin, foodDescription)
                     } else {
                         Log.d("ScanActivity", "Empty response body")
                         Toast.makeText(this@ScanActivity, "Error: ${response.message()}", Toast.LENGTH_LONG).show()
@@ -237,11 +238,12 @@ class ScanActivity : AppCompatActivity() {
     }
 
 
-    private fun navigateToResultActivity(uri: Uri, foodName: String, foodDescription: String) {
+    private fun navigateToResultActivity(uri: Uri, foodName: String, placeofOrigin: String, foodDescription: String) {
         Log.d("ScanActivity", "Navigating to result activity")
         val intent = Intent(this, ResultActivity::class.java).apply {
             putExtra("EXTRA_URI", uri.toString())
             putExtra("EXTRA_FOOD_NAME", foodName)
+            putExtra("EXTRA_FOOD_ORIGIN", placeofOrigin)
             putExtra("EXTRA_FOOD_DESCRIPTION", foodDescription)
         }
         startActivity(intent)

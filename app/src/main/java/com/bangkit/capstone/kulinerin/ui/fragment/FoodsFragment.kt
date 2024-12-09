@@ -10,18 +10,28 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.bangkit.capstone.kulinerin.data.api.ApiConfig
 import com.bangkit.capstone.kulinerin.data.preference.SessionPreferences
+import com.bangkit.capstone.kulinerin.data.preference.sessionDataStore
+import com.bangkit.capstone.kulinerin.data.response.ListFoodResponse
 import com.bangkit.capstone.kulinerin.ui.adapter.FoodAdapter
-import com.bangkit.capstone.kulinerin.ui.model.FoodViewModel
 import com.bangkit.capstone.kulinerin.databinding.FragmentFoodsBinding
 import com.bangkit.capstone.kulinerin.ui.activity.LoginActivity
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class FoodsFragment : Fragment() {
 
     private var _binding: FragmentFoodsBinding? = null
     private val binding get() = _binding!!
-
-    private val foodViewModel: FoodViewModel by viewModels()
+    private lateinit var sessionPreferences: SessionPreferences
+    private lateinit var foodAdapter: FoodAdapter
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,31 +44,44 @@ class FoodsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = FoodAdapter(emptyList())
-        binding.rvFoods.adapter = adapter
-        binding.rvFoods.layoutManager = LinearLayoutManager(requireContext())
+        foodAdapter = FoodAdapter()
+        recyclerView = binding.rvFoods
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.adapter = foodAdapter
 
-        foodViewModel.food.observe(viewLifecycleOwner) { foods ->
-            if (foods != null) {
-                Log.d("FoodsFragment", "Food list updated with ${foods.size} items.")
-                adapter.updateData(foods)
-            } else {
-                Log.d("FoodsFragment", "Food list is null.")
+        sessionPreferences = SessionPreferences.getInstance(requireContext().sessionDataStore)
+        val token = runBlocking {
+            sessionPreferences.getToken().first()
+        }
+        val bearerToken = "Bearer $token"
+        getListFoods(bearerToken)
+    }
+
+    private fun getListFoods(token: String) {
+        val apiService = ApiConfig.getApiService()
+        val call = apiService.getFood(token)
+
+        call.enqueue(object : Callback<ListFoodResponse> {
+            override fun onResponse(call: Call<ListFoodResponse>, response: Response<ListFoodResponse>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        val foodList = responseBody.foods ?: emptyList()
+                        if (foodList.isNotEmpty()) {
+                            foodAdapter.setData(foodList)
+                        } else {
+                            Toast.makeText(requireContext(), "No foods found", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    val errorMessage = "Error: ${response.code()} ${response.message()}"
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                }
             }
-        }
-
-        foodViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.listFoodProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        }
-
-        foodViewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            if (message != null) {
-                Log.e("FoodsFragment", "Error message received: $message")
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            override fun onFailure(call: Call<ListFoodResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        foodViewModel.fetchFoodList("your_token_here")
+        })
     }
 
     override fun onDestroyView() {
