@@ -32,7 +32,8 @@
             card_view:layout_constraintStart_toStartOf="parent"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:text="@string/app_name"/>
+            android:text="@string/app_name"
+            style="@style/SubtitleStyle.Thin"/>
 
         <TextView
             android:id="@+id/tv_food_origin"
@@ -43,7 +44,8 @@
             card_view:layout_constraintStart_toStartOf="parent"
             android:textSize="16sp"
             android:textStyle="normal"
-            android:text="@string/app_name"/>
+            android:text="@string/app_name"
+            style="@style/CaptionStyle"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

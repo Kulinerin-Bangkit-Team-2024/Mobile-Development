@@ -59,5 +59,11 @@ interface ApiService {
     ): Call<ListFoodResponse>
 
     @GET("foods/{food_id}")
-    suspend fun getFoodDetail(@Path("food_id") id: Int): DetailFoodResponse
+    fun getFoodDetail(
+        @Header("Authorization") token: String,
+        @Path("food_id") id: Int
+    ): Call<DetailFoodResponse>
+
+//    @GET("foods/{food_id}")
+//    suspend fun getFoodDetail(@Path("food_id") id: Int): DetailFoodResponse
 }

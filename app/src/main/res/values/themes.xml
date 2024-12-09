@@ -54,6 +54,13 @@
         <item name="android:textSize">20sp</item>
         <item name="fontFamily">@font/poppins_extrabold</item>
     </style>
+    <style name="SubtitleStyle.Thin">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_extrabold</item>
+    </style>
     <!-- STYLE FONT -->
 
 

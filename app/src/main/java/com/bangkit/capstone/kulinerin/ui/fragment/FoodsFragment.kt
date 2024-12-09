@@ -18,6 +18,7 @@ import com.bangkit.capstone.kulinerin.data.preference.sessionDataStore
 import com.bangkit.capstone.kulinerin.data.response.ListFoodResponse
 import com.bangkit.capstone.kulinerin.ui.adapter.FoodAdapter
 import com.bangkit.capstone.kulinerin.databinding.FragmentFoodsBinding
+import com.bangkit.capstone.kulinerin.ui.activity.DetailFoodActivity
 import com.bangkit.capstone.kulinerin.ui.activity.LoginActivity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -44,7 +45,13 @@ class FoodsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        foodAdapter = FoodAdapter()
+
+        foodAdapter = FoodAdapter { selectedFood ->
+            val intent = Intent(requireContext(), DetailFoodActivity::class.java).apply {
+                putExtra("FOOD_ID", selectedFood.foodId)
+            }
+            startActivity(intent)
+        }
         recyclerView = binding.rvFoods
         recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = foodAdapter
@@ -58,11 +65,13 @@ class FoodsFragment : Fragment() {
     }
 
     private fun getListFoods(token: String) {
+        binding.listFoodProgressBar.visibility = View.VISIBLE
         val apiService = ApiConfig.getApiService()
         val call = apiService.getFood(token)
 
         call.enqueue(object : Callback<ListFoodResponse> {
             override fun onResponse(call: Call<ListFoodResponse>, response: Response<ListFoodResponse>) {
+                binding.listFoodProgressBar.visibility = View.GONE
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
@@ -79,6 +88,7 @@ class FoodsFragment : Fragment() {
                 }
             }
             override fun onFailure(call: Call<ListFoodResponse>, t: Throwable) {
+                binding.listFoodProgressBar.visibility = View.GONE
                 Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })

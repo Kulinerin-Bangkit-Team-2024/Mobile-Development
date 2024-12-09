@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ui.activity.DetailFoodActivity">
 
     <ProgressBar
@@ -17,6 +18,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/mascot"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginStart="-150dp"
+        android:layout_marginBottom="-110dp"
+        android:src="@drawable/mascot"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ScrollView
         android:id="@+id/scrollViewFood"
@@ -38,30 +49,37 @@
                 android:id="@+id/img_food_cover"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_place_holder" />
 
             <TextView
                 android:id="@+id/tv_food_name"
+                style="@style/SubtitleStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="36dp"
                 android:layout_marginTop="16dp"
-                android:textStyle="bold"
-                android:text="@string/food_name"/>
+                android:text="@string/food_name"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_food_origin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/food_origin"/>
+                style="@style/WelcomeStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:text="@string/food_origin" />
 
             <TextView
                 android:id="@+id/tv_food_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/food_description"/>
+                android:layout_marginTop="24dp"
+                style="@style/CaptionStyle"
+                android:justificationMode="inter_word"
+                android:text="@string/food_description"
+                android:background="@color/background_blue"
+                android:padding="8dp"/>
 
         </LinearLayout>
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

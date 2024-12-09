@@ -1,13 +1,17 @@
 package com.bangkit.capstone.kulinerin.ui.adapter
 
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bangkit.capstone.kulinerin.data.response.FoodsItem
 import com.bangkit.capstone.kulinerin.databinding.ItemFoodBinding
+import com.bangkit.capstone.kulinerin.ui.activity.DetailFoodActivity
 import com.bumptech.glide.Glide
 
-class FoodAdapter : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
+class FoodAdapter(private val onClick: (FoodsItem) -> Unit) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
     private val foodList = ArrayList<FoodsItem>()
 
@@ -19,6 +23,10 @@ class FoodAdapter : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
                 Glide.with(itemView.context)
                     .load(food.foodImage)
                     .into(imgFoodCover)
+
+                root.setOnClickListener{
+                    onClick(food)
+                }
             }
         }
     }
