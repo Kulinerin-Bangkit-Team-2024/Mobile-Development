@@ -15,11 +15,16 @@ class ResultActivity : AppCompatActivity() {
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val imageUriString = intent.getStringExtra("image_uri")
-        val foodName = intent.getStringExtra("food_name") ?: "Unknown"
+        val imageUriString = intent.getStringExtra("EXTRA_URI")
+        val foodName = intent.getStringExtra("EXTRA_FOOD_NAME") ?: "Unknown"
+        val foodDescription = intent.getStringExtra("EXTRA_FOOD_DESCRIPTION") ?: "Unknown"
         imageUri = Uri.parse(imageUriString)
 
         binding.ivResult.setImageURI(imageUri)
         binding.tvFoodName.text = foodName
+        binding.tvFoodDescription.text = foodDescription
+
+//        TODO: Buat back button mengarah ke MainActivity.
     }
+
 }

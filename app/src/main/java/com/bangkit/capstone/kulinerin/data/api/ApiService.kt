@@ -6,6 +6,7 @@ import com.bangkit.capstone.kulinerin.data.response.ListFoodResponse
 import com.bangkit.capstone.kulinerin.data.response.LogInResponse
 import com.bangkit.capstone.kulinerin.data.response.LogOutResponse
 import com.bangkit.capstone.kulinerin.data.response.RegisterResponse
+import com.bangkit.capstone.kulinerin.data.response.ScanFoodResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -45,12 +46,13 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<CheckTokenResponse>
 
-    // Food
+    // Foods
     @Multipart
-    @POST("predict")
+    @POST("foods/predict")
     fun uploadImage(
-        @Part file: MultipartBody.Part
-    ): Call<ResponseBody> //ImageUploadResponse
+        @Header("Authorization") token: String,
+        @Part image: MultipartBody.Part
+    ): Call<ScanFoodResponse>
 
     @GET("foods")
     suspend fun getFood(
