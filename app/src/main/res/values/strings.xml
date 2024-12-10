@@ -34,6 +34,9 @@
     <string name="error_invalid_email">Please input a valid email address</string>
     <string name="error_invalid_name">Please input a valid name</string>
     <string name="error_password_to_short">Password is less than 8 characters</string>
-    <string name="go_to_register">Don\'t have an account? Let\'s log in</string>
+    <string name="go_to_register">Don\'t have an account? Let\'s register</string>
     <string name="hello_user">Hello, User</string>
+    <string name="search_foods_by_name">Search foods by name...</string>
+    <string name="_00_30">00:30</string>
+    <string name="confirm">Confirm</string>
 </resources>

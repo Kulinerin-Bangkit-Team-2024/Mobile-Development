@@ -41,42 +41,44 @@ class LoginActivity : AppCompatActivity() {
             binding.edInputPassword.setPassword(password)
         }
 
-        binding.btnLogin.setOnClickListener {
-            val email = binding.edInputEmail.getEmail()
-            val password = binding.edInputPassword.getPassword()
+        binding.apply {
+            btnLogin.setOnClickListener {
+                val email = binding.edInputEmail.getEmail()
+                val password = binding.edInputPassword.getPassword()
 
-            Log.d(TAG, "btnLogin: Email entered -> $email")
-            Log.d(TAG, "btnLogin: Password entered -> $password")
+                Log.d(TAG, "btnLogin: Email entered -> $email")
+                Log.d(TAG, "btnLogin: Password entered -> $password")
 
-            binding.edInputEmail.setError(null)
-            binding.edInputPassword.setError(null)
+                binding.edInputEmail.setError(null)
+                binding.edInputPassword.setError(null)
 
-            accountViewModel.setEmail(email)
-            accountViewModel.setPassword(password)
+                accountViewModel.setEmail(email)
+                accountViewModel.setPassword(password)
 
-            if (email.isEmpty()) {
-                Log.d(TAG, "btnLogin: Email is empty")
-                binding.edInputEmail.setError("Email is empty.")
-            } else if (!isValidEmail(email)) {
-                Log.d(TAG, "btnLogin: Invalid email format")
-                binding.edInputEmail.setError("Invalid email format.")
-            } else if (password.isEmpty()) {
-                Log.d(TAG, "btnLogin: Password is empty")
-                binding.edInputPassword.setError("Password is empty.")
-            } else if (!isValidPassword(password)) {
-                Log.d(TAG, "btnLogin: Password is too short")
-                binding.edInputPassword.setError("Password must be at least 8 characters.")
-            } else {
-                Log.d(TAG, "btnLogin: Attempting login")
-                loginUser(email, password)
+                if (email.isEmpty()) {
+                    Log.d(TAG, "btnLogin: Email is empty")
+                    binding.edInputEmail.setError("Email is empty.")
+                } else if (!isValidEmail(email)) {
+                    Log.d(TAG, "btnLogin: Invalid email format")
+                    binding.edInputEmail.setError("Invalid email format.")
+                } else if (password.isEmpty()) {
+                    Log.d(TAG, "btnLogin: Password is empty")
+                    binding.edInputPassword.setError("Password is empty.")
+                } else if (!isValidPassword(password)) {
+                    Log.d(TAG, "btnLogin: Password is too short")
+                    binding.edInputPassword.setError("Password must be at least 8 characters.")
+                } else {
+                    Log.d(TAG, "btnLogin: Attempting login")
+                    loginUser(email, password)
+                }
             }
-        }
 
-        binding.backIcon.setOnClickListener {
-            Log.d(TAG, "backIcon: Back button clicked")
-            val intent = Intent(this, WelcomeActivity::class.java)
-            startActivity(intent)
-            finish()
+            backIcon.setOnClickListener {
+                Log.d(TAG, "backIcon: Back button clicked")
+                val intent = Intent(this@LoginActivity, WelcomeActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 
