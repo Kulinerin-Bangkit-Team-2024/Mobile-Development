@@ -21,7 +21,7 @@ class OTPInputView @JvmOverloads constructor(
 
     init {
         binding.apply {
-            val otpFields = arrayOf(etOtp1, etOtp2, etOtp3, etOtp4)
+            val otpFields = arrayOf(etOtp1, etOtp2, etOtp3, etOtp4, etOtp5, etOtp6)
 
             otpFields.forEach { field ->
                 field.inputType = InputType.TYPE_CLASS_NUMBER
@@ -60,22 +60,21 @@ class OTPInputView @JvmOverloads constructor(
 
     fun getOtp(): String {
         return binding.etOtp1.text.toString() +
-                binding.etOtp2.text.toString() +
-                binding.etOtp3.text.toString() +
-                binding.etOtp4.text.toString()
+                    binding.etOtp2.text.toString() +
+                    binding.etOtp3.text.toString() +
+                    binding.etOtp4.text.toString() +
+                    binding.etOtp5.text.toString() +
+                    binding.etOtp6.text.toString()
     }
 
-    fun setOtp(otp: String) {
-        binding.etOtp1.setText(otp.getOrNull(0)?.toString())
-        binding.etOtp2.setText(otp.getOrNull(1)?.toString())
-        binding.etOtp3.setText(otp.getOrNull(2)?.toString())
-        binding.etOtp4.setText(otp.getOrNull(3)?.toString())
-    }
-
-    fun clearOtp() {
-        binding.etOtp1.text.clear()
-        binding.etOtp2.text.clear()
-        binding.etOtp3.text.clear()
-        binding.etOtp4.text.clear()
+    fun setError(errorMessage: String?) {
+        binding.apply {
+            etOtp1.error = errorMessage
+            etOtp2.error = errorMessage
+            etOtp3.error = errorMessage
+            etOtp4.error = errorMessage
+            etOtp5.error = errorMessage
+            etOtp6.error = errorMessage
+        }
     }
 }

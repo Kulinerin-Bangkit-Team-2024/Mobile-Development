@@ -44,6 +44,7 @@ class RegisterActivity : AppCompatActivity() {
             binding.edInputName.setError(null)
             binding.edInputEmail.setError(null)
             binding.edInputPassword.setError(null)
+            binding.edInputPassword.setHint("Password")
 
             accountViewModel.setName(name)
             accountViewModel.setEmail(email)

@@ -2,13 +2,16 @@ package com.bangkit.capstone.kulinerin.data.api
 
 import com.bangkit.capstone.kulinerin.data.response.CheckTokenResponse
 import com.bangkit.capstone.kulinerin.data.response.DetailFoodResponse
+import com.bangkit.capstone.kulinerin.data.response.ForgotPasswordResponse
 import com.bangkit.capstone.kulinerin.data.response.ListFoodResponse
 import com.bangkit.capstone.kulinerin.data.response.LogInResponse
 import com.bangkit.capstone.kulinerin.data.response.LogOutResponse
 import com.bangkit.capstone.kulinerin.data.response.RegisterResponse
+import com.bangkit.capstone.kulinerin.data.response.ResetPasswordResponse
 import com.bangkit.capstone.kulinerin.data.response.ScanFoodResponse
 import com.bangkit.capstone.kulinerin.data.response.SearchFoodByNameResponse
 import com.bangkit.capstone.kulinerin.data.response.UserProfileResponse
+import com.bangkit.capstone.kulinerin.ui.activity.ResetPasswordActivity
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.Field
@@ -17,6 +20,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -47,6 +51,20 @@ interface ApiService {
     fun checkToken(
         @Header("Authorization") token: String
     ): Call<CheckTokenResponse>
+
+    @FormUrlEncoded
+    @POST("forgot-password")
+    fun forgotPassword(
+        @Field("email") email: String
+    ): Call<ForgotPasswordResponse>
+
+    @FormUrlEncoded
+    @PUT("reset-password")
+    fun resetPassword(
+        @Field("email") email: String,
+        @Field("otp") otp: String,
+        @Field("newpass") password: String
+    ): Call<ResetPasswordResponse>
 
     // Foods
     @Multipart

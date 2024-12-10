@@ -15,6 +15,9 @@ class AccountViewModel : ViewModel() {
     private val _password = MutableLiveData<String>()
     val password: LiveData<String> get() = _password
 
+    private val _otp = MutableLiveData<String>()
+    val otp: LiveData<String> get() = _otp
+
     fun setName(name: String) {
         _name.value = name
     }
@@ -25,5 +28,9 @@ class AccountViewModel : ViewModel() {
 
     fun setPassword(password: String) {
         _password.value = password
+    }
+
+    fun setOtp(otp: String) {
+        _otp.value = otp
     }
 }

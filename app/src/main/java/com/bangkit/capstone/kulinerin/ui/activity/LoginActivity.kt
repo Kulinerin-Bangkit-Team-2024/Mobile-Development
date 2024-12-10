@@ -2,15 +2,19 @@ package com.bangkit.capstone.kulinerin.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bangkit.capstone.kulinerin.data.api.ApiConfig
 import com.bangkit.capstone.kulinerin.data.preference.SessionPreferences
 import com.bangkit.capstone.kulinerin.data.preference.sessionDataStore
+import com.bangkit.capstone.kulinerin.data.response.ForgotPasswordResponse
 import com.bangkit.capstone.kulinerin.data.response.LogInResponse
 import com.bangkit.capstone.kulinerin.databinding.ActivityLoginBinding
 import com.bangkit.capstone.kulinerin.ui.model.AccountViewModel
@@ -51,6 +55,7 @@ class LoginActivity : AppCompatActivity() {
 
                 binding.edInputEmail.setError(null)
                 binding.edInputPassword.setError(null)
+                binding.edInputPassword.setHint("Password")
 
                 accountViewModel.setEmail(email)
                 accountViewModel.setPassword(password)
@@ -79,6 +84,17 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
+
+            tvDontHaveAcc.setOnClickListener {
+                Log.d(TAG, "tvDontHaveAcc: Register button clicked")
+                val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
+            tvForgotPassword.setOnClickListener {
+                showForgotPasswordDialog()
+            }
         }
     }
 
@@ -100,6 +116,9 @@ class LoginActivity : AppCompatActivity() {
     private fun loginUser(email: String, password: String) {
         val apiService = ApiConfig.getApiService()
         Log.d(TAG, "loginUser: Sending login request for email -> $email")
+
+        // Log the password (ensure you're not logging sensitive information in production)
+        Log.d(TAG, "loginUser: Password used -> $password")
 
         val call = apiService.login(email, password)
 
@@ -140,12 +159,21 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
                     }
                 } else {
-                    Log.d(TAG, "onResponse: Response not successful -> ${response.errorBody()}")
+                    // Log the error response body for debugging
+                    val errorBody = response.errorBody()?.string() // Get the error response as a string
+                    Log.d(TAG, "onResponse: Response not successful. Error body -> $errorBody")
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Error: ${response.code()} - ${errorBody}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             override fun onFailure(call: Call<LogInResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure: Error during login request -> ${t.message}")
+                // Log the error message in case of failure
+                Log.d(TAG, "onFailure: Error details -> ${t.printStackTrace()}")
                 Toast.makeText(
                     this@LoginActivity,
                     "Error: ${t.message}",
@@ -153,6 +181,80 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             }
         })
+    }
+
+
+    private fun showForgotPasswordDialog() {
+        val emailEditText = EditText(this).apply {
+            hint = "Enter your e-mail"
+            inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        }
+
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Forgot Password")
+            .setMessage("Please enter your email address to reset your password.")
+            .setView(emailEditText)
+            .setPositiveButton("Submit") { _, _ ->
+                val email = emailEditText.text.toString().trim()
+                if (isValidEmail(email)) {
+                    val apiService = ApiConfig.getApiService()
+                    val call = apiService.forgotPassword(email)
+
+                    call.enqueue(object : Callback<ForgotPasswordResponse> {
+                        override fun onResponse(
+                            call: Call<ForgotPasswordResponse>,
+                            response: Response<ForgotPasswordResponse>
+                        ) {
+                            if (response.isSuccessful) {
+                                val responseBody = response.body()
+                                if (responseBody != null) {
+                                    Toast.makeText(
+                                        this@LoginActivity,
+                                        responseBody.message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    val intent = Intent(this@LoginActivity, ResetPasswordActivity::class.java)
+                                    intent.putExtra("EXTRA_EMAIL", email)
+                                    startActivity(intent)
+                                    finish()
+                                } else {
+                                    Toast.makeText(
+                                        this@LoginActivity,
+                                        "Failed to send password reset email.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            } else {
+                                val errorResponse = response.body()
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    errorResponse?.message ?: "Failed to send password reset email",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<ForgotPasswordResponse>, t: Throwable) {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Error: ${t.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
+                } else {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Invalid email format",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+
+        dialog.show()
     }
 
     companion object {

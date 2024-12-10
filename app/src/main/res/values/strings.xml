@@ -39,4 +39,5 @@
     <string name="search_foods_by_name">Search foods by name...</string>
     <string name="_00_30">00:30</string>
     <string name="confirm">Confirm</string>
+    <string name="forgot_password">Forgot password?</string>
 </resources>

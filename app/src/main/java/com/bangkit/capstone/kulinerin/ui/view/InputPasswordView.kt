@@ -27,7 +27,7 @@ class InputPasswordView @JvmOverloads constructor(
 
         binding.etInput.apply {
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-            hint = context.getString(R.string.password)
+            hint = "Password"
             setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock, 0, R.drawable.baseline_visibility_24, 0)
 
             setOnTouchListener { _, event ->
@@ -80,6 +80,10 @@ class InputPasswordView @JvmOverloads constructor(
         } else {
             null
         }
+    }
+
+    fun setHint(hint: String) {
+        binding.etInput.hint = hint
     }
 
     fun getPassword(): String = binding.etInput.text?.toString()?.trim() ?: ""
