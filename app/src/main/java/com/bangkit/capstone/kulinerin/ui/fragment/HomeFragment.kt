@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bangkit.capstone.kulinerin.R
 import com.bangkit.capstone.kulinerin.data.api.ApiConfig
 import com.bangkit.capstone.kulinerin.data.preference.SessionPreferences
 import com.bangkit.capstone.kulinerin.data.preference.sessionDataStore
@@ -17,6 +18,7 @@ import com.bangkit.capstone.kulinerin.data.response.UserProfileResponse
 import com.bangkit.capstone.kulinerin.ui.activity.DetailFoodActivity
 import com.bangkit.capstone.kulinerin.ui.adapter.FoodAdapter
 import com.bangkit.capstone.kulinerin.databinding.FragmentHomeBinding
+import com.bangkit.capstone.kulinerin.ui.adapter.BannerAdapter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import retrofit2.Call
@@ -30,6 +32,7 @@ class HomeFragment : Fragment() {
     private lateinit var sessionPreferences: SessionPreferences
     private lateinit var foodAdapter: FoodAdapter
     private lateinit var recyclerView: RecyclerView
+    private lateinit var bannerAdapter: BannerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +46,18 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         _binding?.let { binding ->
+
+            // Inisialisasi adapter untuk banner
+            val banners = listOf(
+                R.drawable.banner1,
+                R.drawable.banner2
+            )
+            bannerAdapter = BannerAdapter(banners)
+
+            // Set adapter ke RecyclerView
+            binding.recyclerViewBanner.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            binding.recyclerViewBanner.adapter = bannerAdapter
+
             foodAdapter = FoodAdapter { selectedFood ->
                 val intent = Intent(requireContext(), DetailFoodActivity::class.java).apply {
                     putExtra("FOOD_ID", selectedFood.foodId)
