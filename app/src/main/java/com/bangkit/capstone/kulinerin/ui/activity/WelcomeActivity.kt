@@ -3,11 +3,9 @@ package com.bangkit.capstone.kulinerin.ui.activity
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.bangkit.capstone.kulinerin.R
 import com.bangkit.capstone.kulinerin.databinding.ActivityWelcomeBinding
 
 class WelcomeActivity : AppCompatActivity() {
@@ -20,7 +18,9 @@ class WelcomeActivity : AppCompatActivity() {
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        val fadeInAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
+        val fadeOutAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out)
+        window.decorView.startAnimation(fadeInAnimation)
 
         val translateY = resources.displayMetrics.density * -120
         val animator = ObjectAnimator.ofFloat(binding.welcomeLogo, "translationY", 0f, translateY)
@@ -29,13 +29,23 @@ class WelcomeActivity : AppCompatActivity() {
 
         binding.btnLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            val options = android.app.ActivityOptions.makeCustomAnimation(
+                this,
+                android.R.anim.fade_in,
+                android.R.anim.fade_out
+            )
+            startActivity(intent, options.toBundle())
             finish()
         }
 
         binding.btnRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            val options = android.app.ActivityOptions.makeCustomAnimation(
+                this,
+                android.R.anim.fade_in,
+                android.R.anim.fade_out
+            )
+            startActivity(intent, options.toBundle())
             finish()
         }
     }
