@@ -7,6 +7,7 @@ import com.bangkit.capstone.kulinerin.data.response.LogInResponse
 import com.bangkit.capstone.kulinerin.data.response.LogOutResponse
 import com.bangkit.capstone.kulinerin.data.response.RegisterResponse
 import com.bangkit.capstone.kulinerin.data.response.ScanFoodResponse
+import com.bangkit.capstone.kulinerin.data.response.SearchFoodByNameResponse
 import com.bangkit.capstone.kulinerin.data.response.UserProfileResponse
 import okhttp3.MultipartBody
 import retrofit2.Call
@@ -18,6 +19,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     // Auth
@@ -65,7 +67,15 @@ interface ApiService {
         @Path("food_id") id: Int
     ): Call<DetailFoodResponse>
 
+    @GET("foods/search/name")
+    fun searchFoodByName(
+        @Header("Authorization") token: String,
+        @Query("name") name: String
+    ): Call<SearchFoodByNameResponse>
+
+    // User
     @GET("user/profile")
-    fun getUserProfile(@Header("Authorization") token: String
+    fun getUserProfile(
+        @Header("Authorization") token: String
     ): Call<UserProfileResponse>
 }

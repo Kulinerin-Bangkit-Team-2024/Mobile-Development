@@ -16,6 +16,8 @@
         <item name="colorSecondaryContainer">@color/white</item>
         <item name="colorOnSecondaryContainer">@color/light_blue</item>
 
+        <item name="android:windowIsTranslucent">true</item>
+
         <item name="android:windowActivityTransitions">true</item>
     </style>
 
@@ -112,5 +114,11 @@
         <item name="android:drawableTint">?attr/colorAccent</item>
     </style>
     <!-- STYLE INPUT -->
+
+    <style name="CustomSearchBarStyle" parent="Widget.Material3.SearchBar">
+        <item name="android:backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="hintTextColor">@android:color/white</item>
+    </style>
 
 </resources>
