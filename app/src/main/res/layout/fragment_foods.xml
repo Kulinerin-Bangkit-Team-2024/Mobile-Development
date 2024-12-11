@@ -9,14 +9,16 @@
     <com.google.android.material.search.SearchBar
         android:id="@+id/sb_foods"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp"
         android:hint="@string/search_foods_by_name"
         style="@style/CustomSearchBarStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"/>
 
     <com.google.android.material.search.SearchView
         android:id="@+id/sv_foods"
@@ -26,7 +28,8 @@
         app:layout_anchor="@id/sb_foods"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/CaptionStyle"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_foods"
@@ -37,7 +40,8 @@
         android:overScrollMode="never"
         app:layout_constraintTop_toBottomOf="@id/sb_foods"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_food" />
+        tools:listitem="@layout/item_food"
+        android:elevation="10dp"/>
 
     <ProgressBar
         android:id="@+id/list_food_progress_bar"

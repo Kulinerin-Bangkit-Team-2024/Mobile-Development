@@ -47,14 +47,12 @@ class HomeFragment : Fragment() {
 
         _binding?.let { binding ->
 
-            // Inisialisasi adapter untuk banner
             val banners = listOf(
                 R.drawable.banner1,
                 R.drawable.banner2
             )
             bannerAdapter = BannerAdapter(banners)
 
-            // Set adapter ke RecyclerView
             binding.recyclerViewBanner.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             binding.recyclerViewBanner.adapter = bannerAdapter
 

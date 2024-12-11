@@ -89,7 +89,7 @@ class FoodsFragment : Fragment() {
             }
 
             sbFoods.setOnMenuItemClickListener {
-                svFoods.show() // Show search view
+                svFoods.show()
                 true
             }
         }

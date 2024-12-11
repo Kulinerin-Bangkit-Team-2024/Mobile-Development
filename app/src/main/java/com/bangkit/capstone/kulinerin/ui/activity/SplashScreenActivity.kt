@@ -4,12 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bangkit.capstone.kulinerin.data.api.ApiConfig
 import com.bangkit.capstone.kulinerin.data.preference.SessionPreferences
+import com.bangkit.capstone.kulinerin.data.preference.SettingPreferences
 import com.bangkit.capstone.kulinerin.data.preference.sessionDataStore
+import com.bangkit.capstone.kulinerin.data.preference.settingDataStore
 import com.bangkit.capstone.kulinerin.data.response.CheckTokenResponse
 import com.bangkit.capstone.kulinerin.databinding.ActivitySplashScreenBinding
+import com.bangkit.capstone.kulinerin.ui.model.SettingViewModel
+import com.bangkit.capstone.kulinerin.ui.model.SettingViewModelFactory
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,6 +25,7 @@ import retrofit2.Response
 class SplashScreenActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashScreenBinding
+    private lateinit var settingViewModel: SettingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +43,17 @@ class SplashScreenActivity : AppCompatActivity() {
                 handleNavigation(token)
             }
         }
+
+        val pref = SettingPreferences.getInstance(application.settingDataStore)
+        settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref))[SettingViewModel::class.java]
+
+        settingViewModel.getThemeSettings().observe(this, Observer { isDarkModeActive ->
+            if (isDarkModeActive) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        })
     }
 
     private fun handleNavigation(token: String?) {

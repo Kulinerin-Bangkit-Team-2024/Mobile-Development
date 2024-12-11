@@ -147,6 +147,7 @@ class ScanActivity : AppCompatActivity() {
     }
 
     private fun sendImageToResult(uri: Uri) {
+        binding.progressBar.visibility = android.view.View.VISIBLE
         Log.d("ScanActivity", "Sending image to result: $uri")
         val file = uriToFile(uri) ?: run {
             Log.e("ScanActivity", "Failed to convert URI to File")
@@ -190,6 +191,9 @@ class ScanActivity : AppCompatActivity() {
     }
 
     private fun uploadImage(file: File, uri: Uri) {
+        binding.progressBar.apply {
+            visibility = android.view.View.VISIBLE
+        }
         Log.d("ScanActivity", "Uploading image: ${file.absolutePath}")
 
         val mimeType = contentResolver.getType(uri) ?: "image/jpeg"
@@ -208,6 +212,7 @@ class ScanActivity : AppCompatActivity() {
         val call = apiService.uploadImage("Bearer $token", part)
         call.enqueue(object : Callback<ScanFoodResponse> {
             override fun onResponse(call: Call<ScanFoodResponse>, response: Response<ScanFoodResponse>) {
+                binding.progressBar.visibility = android.view.View.GONE
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     Log.d("ScanActivity", "Response successful: $responseBody")
@@ -232,6 +237,7 @@ class ScanActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<ScanFoodResponse>, t: Throwable) {
                 Log.e("ScanActivity", "Upload failed", t)
+                binding.progressBar.visibility = android.view.View.GONE
                 Toast.makeText(this@ScanActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
             }
         })

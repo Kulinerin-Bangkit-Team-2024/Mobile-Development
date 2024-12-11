@@ -109,6 +109,7 @@
         android:layout_marginTop="72dp"
         android:text="@string/register"
         android:textColor="@color/white"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        style="@style/WelcomeStyle"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
