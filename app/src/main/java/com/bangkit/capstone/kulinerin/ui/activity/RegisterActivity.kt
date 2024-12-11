@@ -3,7 +3,6 @@ package com.bangkit.capstone.kulinerin.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bangkit.capstone.kulinerin.data.api.ApiConfig
@@ -122,7 +121,6 @@ class RegisterActivity : AppCompatActivity() {
                     "Terjadi kesalahan: ${t.message}",
                     Toast.LENGTH_SHORT
                 ).show()
-//                Log.e("RegisterActivity", "onFailure: ${t.message}", t)
             }
         })
     }

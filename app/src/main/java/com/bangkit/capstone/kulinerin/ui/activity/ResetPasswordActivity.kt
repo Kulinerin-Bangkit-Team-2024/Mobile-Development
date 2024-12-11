@@ -3,7 +3,6 @@ package com.bangkit.capstone.kulinerin.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +26,6 @@ class ResetPasswordActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val email = intent.getStringExtra("EXTRA_EMAIL")
-        Log.d(TAG, "Received email: $email")
 
         startCountDownTimer()
 
@@ -38,9 +36,6 @@ class ResetPasswordActivity : AppCompatActivity() {
                 val password = edInputPassword.getPassword()
                 val otp = edInputOtp.getOtp()
 
-                Log.d(TAG, "Password entered: $password")
-                Log.d(TAG, "OTP entered: $otp")
-
                 edInputEmail.setError(null)
                 edInputPassword.setError(null)
                 edInputOtp.setError(null)
@@ -50,19 +45,14 @@ class ResetPasswordActivity : AppCompatActivity() {
                 accountViewModel.setOtp(otp)
 
                 if (email?.isEmpty() == true) {
-                    Log.d(TAG, "btnConfirm: Email is empty")
                     edInputEmail.setError("Email is empty.")
                 } else if (password.isEmpty()) {
-                    Log.d(TAG, "btnConfirm: Password is empty")
                     edInputPassword.setError("Password is empty.")
                 } else if (!isValidPassword(password)) {
-                    Log.d(TAG, "btnConfirm: Invalid password (less than 8 characters)")
                     edInputPassword.setError("Password must be at least 8 characters.")
                 } else if (otp.isEmpty()) {
-                    Log.d(TAG, "btnConfirm: OTP is empty")
                     edInputOtp.setError("OTP is empty.")
                 } else {
-                    Log.d(TAG, "All inputs are valid, proceeding with reset")
                     email?.let { email -> resetUserPassword(email, password, otp) }
                 }
             }
@@ -71,12 +61,10 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private fun isValidPassword(password: String): Boolean {
         val isValid = password.length >= 8
-        Log.d(TAG, "isValidPassword: Password length -> ${password.length} | Valid -> $isValid")
         return isValid
     }
 
     private fun resetUserPassword(email: String, password: String, otp: String) {
-        Log.d(TAG, "Resetting password for email: $email, OTP: $otp, password: $password")
         val apiService = ApiConfig.getApiService()
         val call = apiService.resetPassword(email, otp, password)
 
@@ -88,7 +76,6 @@ class ResetPasswordActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val resetPasswordResponse = response.body()
                     if (resetPasswordResponse != null && resetPasswordResponse.status == "success") {
-                        Log.d(TAG, "Password reset successful: ${resetPasswordResponse.message}")
                         Toast.makeText(
                             this@ResetPasswordActivity,
                             resetPasswordResponse.message,
@@ -99,7 +86,6 @@ class ResetPasswordActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } else {
-                        Log.d(TAG, "Failed to reset password: ${resetPasswordResponse?.message}")
                         Toast.makeText(
                             this@ResetPasswordActivity,
                             "Failed to reset password.",
@@ -107,7 +93,6 @@ class ResetPasswordActivity : AppCompatActivity() {
                         ).show()
                     }
                 } else {
-                    Log.d(TAG, "Response error: ${response.code()}")
                     Toast.makeText(
                         this@ResetPasswordActivity,
                         "Failed to reset password.",
@@ -117,10 +102,9 @@ class ResetPasswordActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResetPasswordResponse>, t: Throwable) {
-                Log.d(TAG, "Error: ${t.message}") // Log error message if failure occurs
                 Toast.makeText(
                     this@ResetPasswordActivity,
-                    "Error: ${t.message}",
+                    "${t.message}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -128,7 +112,7 @@ class ResetPasswordActivity : AppCompatActivity() {
     }
 
     private fun startCountDownTimer() {
-        countDownTimer = object : CountDownTimer(5 * 60 * 1000, 1000) { // 5 menit
+        countDownTimer = object : CountDownTimer(5 * 60 * 1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val seconds = (millisUntilFinished / 1000) % 60
                 val minutes = millisUntilFinished / 1000 / 60
@@ -156,9 +140,5 @@ class ResetPasswordActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         countDownTimer.cancel()
-    }
-
-    companion object {
-        private const val TAG = "ResetPasswordActivity"
     }
 }

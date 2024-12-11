@@ -5,7 +5,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_margin="8dp"
     card_view:cardCornerRadius="8dp"
-    card_view:cardBackgroundColor="@color/background_blue">
+    card_view:cardBackgroundColor="?attr/colorPrimary">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:textStyle="bold"
             android:layout_marginTop="8dp"
             android:text="@string/app_name"
-            style="@style/SubtitleStyle.Thin"/>
+            style="@style/SubtitleStyle"/>
 
         <TextView
             android:id="@+id/tv_food_origin"

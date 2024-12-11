@@ -2,10 +2,8 @@ package com.bangkit.capstone.kulinerin.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bangkit.capstone.kulinerin.data.api.ApiConfig
@@ -39,7 +37,6 @@ class SplashScreenActivity : AppCompatActivity() {
             val tokenFlow = sessionPreferences.getToken()
 
             tokenFlow.collect { token ->
-                Log.d("SplashScreenActivity", "Collected token: $token")
                 handleNavigation(token)
             }
         }
@@ -47,31 +44,27 @@ class SplashScreenActivity : AppCompatActivity() {
         val pref = SettingPreferences.getInstance(application.settingDataStore)
         settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref))[SettingViewModel::class.java]
 
-        settingViewModel.getThemeSettings().observe(this, Observer { isDarkModeActive ->
+        settingViewModel.getThemeSettings().observe(this) { isDarkModeActive ->
             if (isDarkModeActive) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
-        })
+        }
     }
 
     private fun handleNavigation(token: String?) {
-        Log.d("SplashScreenActivity", "Handling navigation with token: $token")
         val splashTime: Long = 2000
         window.decorView.postDelayed({
             if (token.isNullOrEmpty()) {
-                Log.d("SplashScreenActivity", "Token is null or empty, navigating to Welcome")
                 navigateToWelcome()
             } else {
-                Log.d("SplashScreenActivity", "Token is not empty $token")
                 checkTokenBanlist(token)
             }
         }, splashTime)
     }
 
     private fun checkTokenBanlist(token: String?) {
-        Log.d("SplashScreenActivity", "Checking token banlist with token: $token")
         val apiService = ApiConfig.getApiService()
         val call = apiService.checkToken("Bearer $token")
 
@@ -80,23 +73,18 @@ class SplashScreenActivity : AppCompatActivity() {
                 call: Call<CheckTokenResponse>,
                 response: Response<CheckTokenResponse>
             ) {
-                Log.d("SplashScreenActivity", "Response code: ${response.code()}")
                 lifecycleScope.launch {
                     val sessionPreferences = SessionPreferences.getInstance(dataStore = applicationContext.sessionDataStore)
                     if (response.isSuccessful || response.code() == 404) {
                         val checkTokenResponse = response.body()
-                        Log.d("SplashScreenActivity", "Response body: ${checkTokenResponse?.status}")
                         if (checkTokenResponse?.status != "success") {
-                            Log.d("SplashScreenActivity", "Token is valid, navigating to Main")
                             sessionPreferences.saveToken(token.orEmpty())
                             navigateToMain()
                         } else {
-                            Log.d("SplashScreenActivity", "Token is banned, navigating to Welcome")
                             sessionPreferences.saveToken(null)
                             navigateToWelcome()
                         }
                     } else {
-                        Log.d("SplashScreenActivity", "Response failed, removing token and navigating to Welcome")
                         sessionPreferences.saveToken(null)
                         navigateToWelcome()
                     }
@@ -104,10 +92,8 @@ class SplashScreenActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<CheckTokenResponse>, t: Throwable) {
-                Log.e("SplashScreenActivity", "Failure: ${t.message}", t)
                 lifecycleScope.launch {
                     val sessionPreferences = SessionPreferences.getInstance(dataStore = applicationContext.sessionDataStore)
-                    Log.d("SplashScreenActivity", "Removing token and navigating to Welcome due to failure")
                     sessionPreferences.saveToken(null)
                     navigateToWelcome()
                 }
@@ -116,13 +102,11 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun navigateToMain() {
-        Log.d("SplashScreenActivity", "Navigating to MainActivity")
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 
     private fun navigateToWelcome() {
-        Log.d("SplashScreenActivity", "Navigating to WelcomeActivity")
         startActivity(Intent(this, WelcomeActivity::class.java))
         finish()
     }

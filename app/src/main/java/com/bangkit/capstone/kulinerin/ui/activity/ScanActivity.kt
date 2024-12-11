@@ -43,7 +43,6 @@ class ScanActivity : AppCompatActivity() {
     private val photoPickerLauncher = registerForActivityResult(
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
-        Log.d("ScanActivity", "Photo picker result: ${uri?.toString() ?: "No media selected"}")
         if (uri != null) {
             sendImageToResult(uri)
         }
@@ -51,23 +50,19 @@ class ScanActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("ScanActivity", "onCreate called")
         binding = ActivityScanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         sessionPreferences = SessionPreferences.getInstance(dataStore = this.sessionDataStore)
 
         if (permissionGranted()) {
-            Log.d("ScanActivity", "Camera permission granted")
             startCamera()
         } else {
-            Log.d("ScanActivity", "Camera permission not granted, requesting permission")
             requestCameraPermission()
         }
 
         binding.apply {
             cvCaptureButton.setOnClickListener {
-                Log.d("ScanActivity", "Capture button clicked")
                 if (permissionGranted()) {
                     capturePhoto()
                 } else {
@@ -75,19 +70,16 @@ class ScanActivity : AppCompatActivity() {
                 }
             }
             gvGalleryButton.setOnClickListener {
-                Log.d("ScanActivity", "Gallery button clicked")
                 openGalleryWithPhotoPicker()
             }
         }
     }
 
     private fun openGalleryWithPhotoPicker() {
-        Log.d("ScanActivity", "Opening gallery with Photo Picker")
         photoPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
     }
 
     private fun startCamera() {
-        Log.d("ScanActivity", "Starting camera")
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener({
@@ -99,7 +91,6 @@ class ScanActivity : AppCompatActivity() {
             imageCapture = ImageCapture.Builder().build()
 
             try {
-                Log.d("ScanActivity", "Binding camera use cases")
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
                     this,
@@ -108,16 +99,13 @@ class ScanActivity : AppCompatActivity() {
                     imageCapture
                 )
             } catch (exc: Exception) {
-                Log.e("ScanActivity", "Failed to bind camera use cases", exc)
                 Toast.makeText(this@ScanActivity, "Failed to start camera", Toast.LENGTH_SHORT).show()
             }
         }, ContextCompat.getMainExecutor(this))
     }
 
     private fun capturePhoto() {
-        Log.d("ScanActivity", "Capturing photo")
         val imageCapture = imageCapture ?: run {
-            Log.d("ScanActivity", "ImageCapture is null")
             return
         }
 
@@ -125,7 +113,6 @@ class ScanActivity : AppCompatActivity() {
             externalCacheDir,
             SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis()) + ".jpeg"
         )
-        Log.d("ScanActivity", "Photo file created: ${photoFile.absolutePath}")
 
         val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
         imageCapture.takePicture(
@@ -134,12 +121,10 @@ class ScanActivity : AppCompatActivity() {
             object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val savedUri = Uri.fromFile(photoFile)
-                    Log.d("ScanActivity", "Photo saved: $savedUri")
                     sendImageToResult(savedUri)
                 }
 
                 override fun onError(exception: ImageCaptureException) {
-                    Log.e("ScanActivity", "Error capturing photo", exception)
                     Toast.makeText(this@ScanActivity, "Failed to capture photo", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -148,13 +133,11 @@ class ScanActivity : AppCompatActivity() {
 
     private fun sendImageToResult(uri: Uri) {
         binding.progressBar.visibility = android.view.View.VISIBLE
-        Log.d("ScanActivity", "Sending image to result: $uri")
         val file = uriToFile(uri) ?: run {
             Log.e("ScanActivity", "Failed to convert URI to File")
             Toast.makeText(this, "Failed to process the image", Toast.LENGTH_SHORT).show()
             return
         }
-        Log.d("ScanActivity", "Converted file path: ${file.absolutePath}")
         uploadImage(file, uri)
     }
 
@@ -162,8 +145,6 @@ class ScanActivity : AppCompatActivity() {
         return try {
             val contentResolver = this.contentResolver
             val mimeType = contentResolver.getType(uri)
-
-            Log.d("ScanActivity", "MIME type: $mimeType")
 
             if (mimeType != null && mimeType.startsWith("image")) {
                 val fileExtension = when (mimeType) {
@@ -181,11 +162,9 @@ class ScanActivity : AppCompatActivity() {
                 }
                 tempFile
             } else {
-                Log.e("ScanActivity", "Invalid MIME type: $mimeType")
                 null
             }
         } catch (e: Exception) {
-            Log.e("ScanActivity", "Error converting URI to File", e)
             null
         }
     }
@@ -194,15 +173,11 @@ class ScanActivity : AppCompatActivity() {
         binding.progressBar.apply {
             visibility = android.view.View.VISIBLE
         }
-        Log.d("ScanActivity", "Uploading image: ${file.absolutePath}")
 
         val mimeType = contentResolver.getType(uri) ?: "image/jpeg"
-        Log.d("ScanActivity", "MIME Type: $mimeType")
 
         val token = runBlocking {
-            sessionPreferences.getToken().first().also {
-                Log.d("ScanActivity", "Token retrieved: $it")
-            }
+            sessionPreferences.getToken().first()
         }
 
         val requestBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
@@ -215,37 +190,32 @@ class ScanActivity : AppCompatActivity() {
                 binding.progressBar.visibility = android.view.View.GONE
                 if (response.isSuccessful) {
                     val responseBody = response.body()
-                    Log.d("ScanActivity", "Response successful: $responseBody")
                     if (responseBody != null) {
-                        // Perbarui untuk mengakses queryResult melalui data -> queryResult
                         val foodName = responseBody.data.queryResult[0].foodName
                         val placeOfOrigin = responseBody.data.queryResult[0].placeOfOrigin
                         val foodDescription = responseBody.data.queryResult[0].description
                         navigateToResultActivity(uri, foodName, placeOfOrigin, foodDescription)
                     } else {
-                        Log.d("ScanActivity", "Empty response body")
-                        Toast.makeText(this@ScanActivity, "Error: ${response.message()}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@ScanActivity, response.message(), Toast.LENGTH_LONG).show()
                     }
                 } else {
                     if (response.code() == 500) {
-                        Log.d("ScanActivity", "Server Error 500: ${response.message()} - ${response.body()}")
+                        Toast.makeText(this@ScanActivity, "Internal Server Error", Toast.LENGTH_LONG).show()
                     } else {
-                        Log.d("ScanActivity", "Response error: ${response.code()} - ${response.message()} - ${response.body()}")
+                        Toast.makeText(this@ScanActivity, response.message(), Toast.LENGTH_LONG).show()
                     }
                 }
             }
 
             override fun onFailure(call: Call<ScanFoodResponse>, t: Throwable) {
-                Log.e("ScanActivity", "Upload failed", t)
                 binding.progressBar.visibility = android.view.View.GONE
-                Toast.makeText(this@ScanActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@ScanActivity, "${t.message}", Toast.LENGTH_LONG).show()
             }
         })
     }
 
 
     private fun navigateToResultActivity(uri: Uri, foodName: String, placeofOrigin: String, foodDescription: String) {
-        Log.d("ScanActivity", "Navigating to result activity")
         val intent = Intent(this, ResultActivity::class.java).apply {
             putExtra("EXTRA_URI", uri.toString())
             putExtra("EXTRA_FOOD_NAME", foodName)
@@ -258,12 +228,10 @@ class ScanActivity : AppCompatActivity() {
 
     private fun permissionGranted(): Boolean {
         val granted = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-        Log.d("ScanActivity", "Permission granted: $granted")
         return granted
     }
 
     private fun requestCameraPermission() {
-        Log.d("ScanActivity", "Requesting camera permission")
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
             Toast.makeText(this, "Camera permission is required to use the camera", Toast.LENGTH_SHORT).show()
         }
@@ -276,7 +244,6 @@ class ScanActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.d("ScanActivity", "onRequestPermissionsResult called for requestCode $requestCode")
         if (requestCode == REQUEST_CODE_CAMERA_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startCamera()

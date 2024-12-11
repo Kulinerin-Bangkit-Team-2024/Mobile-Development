@@ -6,7 +6,6 @@ import android.text.InputType
 import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -31,16 +30,13 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate: Initializing LoginActivity")
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         accountViewModel.email.observe(this) { email ->
-            Log.d(TAG, "onCreate: Observed email change -> $email")
             binding.edInputEmail.setEmail(email)
         }
         accountViewModel.password.observe(this) { password ->
-            Log.d(TAG, "onCreate: Observed password change -> $password")
             binding.edInputPassword.setPassword(password)
         }
 
@@ -48,9 +44,6 @@ class LoginActivity : AppCompatActivity() {
             btnLogin.setOnClickListener {
                 val email = binding.edInputEmail.getEmail()
                 val password = binding.edInputPassword.getPassword()
-
-                Log.d(TAG, "btnLogin: Email entered -> $email")
-                Log.d(TAG, "btnLogin: Password entered -> $password")
 
                 binding.edInputEmail.setError(null)
                 binding.edInputPassword.setError(null)
@@ -60,16 +53,12 @@ class LoginActivity : AppCompatActivity() {
                 accountViewModel.setPassword(password)
 
                 if (email.isEmpty()) {
-                    Log.d(TAG, "btnLogin: Email is empty")
                     binding.edInputEmail.setError("Email is empty.")
                 } else if (!isValidEmail(email)) {
-                    Log.d(TAG, "btnLogin: Invalid email format")
                     binding.edInputEmail.setError("Invalid email format.")
                 } else if (password.isEmpty()) {
-                    Log.d(TAG, "btnLogin: Password is empty")
                     binding.edInputPassword.setError("Password is empty.")
                 } else if (!isValidPassword(password)) {
-                    Log.d(TAG, "btnLogin: Password is too short")
                     binding.edInputPassword.setError("Password must be at least 8 characters.")
                 } else {
                     Log.d(TAG, "btnLogin: Attempting login")
@@ -78,14 +67,12 @@ class LoginActivity : AppCompatActivity() {
             }
 
             backIcon.setOnClickListener {
-                Log.d(TAG, "backIcon: Back button clicked")
                 val intent = Intent(this@LoginActivity, WelcomeActivity::class.java)
                 startActivity(intent)
                 finish()
             }
 
             tvDontHaveAcc.setOnClickListener {
-                Log.d(TAG, "tvDontHaveAcc: Register button clicked")
                 val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -102,21 +89,16 @@ class LoginActivity : AppCompatActivity() {
             "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
         )
         val isValid = emailPattern.matcher(email).matches()
-        Log.d(TAG, "isValidEmail: Email -> $email | Valid -> $isValid")
         return isValid
     }
 
     private fun isValidPassword(password: String): Boolean {
         val isValid = password.length >= 8
-        Log.d(TAG, "isValidPassword: Password length -> ${password.length} | Valid -> $isValid")
         return isValid
     }
 
     private fun loginUser(email: String, password: String) {
         val apiService = ApiConfig.getApiService()
-        Log.d(TAG, "loginUser: Sending login request for email -> $email")
-
-        Log.d(TAG, "loginUser: Password used -> $password")
 
         val call = apiService.login(email, password)
 
@@ -125,10 +107,8 @@ class LoginActivity : AppCompatActivity() {
                 call: Call<LogInResponse>,
                 response: Response<LogInResponse>
             ) {
-                Log.d(TAG, "onResponse: Response received")
                 if (response.isSuccessful) {
                     val loginResponse = response.body()
-                    Log.d(TAG, "onResponse: Response body -> $loginResponse")
                     if (loginResponse != null && loginResponse.status == "success") {
                         Toast.makeText(
                             this@LoginActivity,
@@ -137,11 +117,9 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
 
                         val token = loginResponse.token
-                        Log.d(TAG, "onResponse: Login successful. Token -> $token")
 
                         val sessionPreferences = SessionPreferences.getInstance(dataStore = applicationContext.sessionDataStore)
                         lifecycleScope.launch {
-                            Log.d(TAG, "onResponse: Saving token")
                             sessionPreferences.saveToken(token)
                         }
 
@@ -149,7 +127,6 @@ class LoginActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } else {
-                        Log.d(TAG, "onResponse: Login failed. Status -> ${loginResponse?.status}")
                         Toast.makeText(
                             this@LoginActivity,
                             "Login failed. Please try again.",
@@ -157,22 +134,19 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
                     }
                 } else {
-                    val errorBody = response.errorBody()?.string() // Get the error response as a string
-                    Log.d(TAG, "onResponse: Response not successful. Error body -> $errorBody")
+                    val errorBody = response.body()
                     Toast.makeText(
                         this@LoginActivity,
-                        "Error: ${response.code()} - ${errorBody}",
+                        "${errorBody?.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             }
 
             override fun onFailure(call: Call<LogInResponse>, t: Throwable) {
-                Log.e(TAG, "onFailure: Error during login request -> ${t.message}")
-                Log.d(TAG, "onFailure: Error details -> ${t.printStackTrace()}")
                 Toast.makeText(
                     this@LoginActivity,
-                    "Error: ${t.message}",
+                    "${t.message}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -234,7 +208,7 @@ class LoginActivity : AppCompatActivity() {
                         override fun onFailure(call: Call<ForgotPasswordResponse>, t: Throwable) {
                             Toast.makeText(
                                 this@LoginActivity,
-                                "Error: ${t.message}",
+                                "${t.message}",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

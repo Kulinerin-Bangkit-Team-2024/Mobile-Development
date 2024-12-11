@@ -36,17 +36,16 @@ class MainActivity : AppCompatActivity() {
             goToScanActivity()
         }
 
-        //DarkMode
         val pref = SettingPreferences.getInstance(application.settingDataStore)
         settingViewModel = ViewModelProvider(this, SettingViewModelFactory(pref))[SettingViewModel::class.java]
 
-        settingViewModel.getThemeSettings().observe(this, Observer { isDarkModeActive ->
+        settingViewModel.getThemeSettings().observe(this) { isDarkModeActive ->
             if (isDarkModeActive) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
-        })
+        }
     }
 
     private fun goToScanActivity() {

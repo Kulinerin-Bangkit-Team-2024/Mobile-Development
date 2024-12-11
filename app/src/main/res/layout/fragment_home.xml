@@ -26,7 +26,7 @@
         app:layout_constraintStart_toEndOf="@id/profile_image"
         android:text="@string/hello_user"
         android:layout_marginStart="16dp"
-        style="@style/SubtitleStyle.Thin"/>
+        style="@style/SubtitleStyle"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewBanner"

@@ -25,8 +25,6 @@ class ResultActivity : AppCompatActivity() {
         binding.tvFoodName.text = foodName
         binding.tvFoodRegion.text = foodOrigin
         binding.tvFoodDescription.text = foodDescription
-
-//        TODO: Buat back button mengarah ke MainActivity.
     }
 
 }
