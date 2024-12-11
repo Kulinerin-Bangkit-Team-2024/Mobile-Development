@@ -116,7 +116,6 @@ class LoginActivity : AppCompatActivity() {
         val apiService = ApiConfig.getApiService()
         Log.d(TAG, "loginUser: Sending login request for email -> $email")
 
-        // Log the password (ensure you're not logging sensitive information in production)
         Log.d(TAG, "loginUser: Password used -> $password")
 
         val call = apiService.login(email, password)
@@ -158,7 +157,6 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
                     }
                 } else {
-                    // Log the error response body for debugging
                     val errorBody = response.errorBody()?.string() // Get the error response as a string
                     Log.d(TAG, "onResponse: Response not successful. Error body -> $errorBody")
                     Toast.makeText(
@@ -171,7 +169,6 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<LogInResponse>, t: Throwable) {
                 Log.e(TAG, "onFailure: Error during login request -> ${t.message}")
-                // Log the error message in case of failure
                 Log.d(TAG, "onFailure: Error details -> ${t.printStackTrace()}")
                 Toast.makeText(
                     this@LoginActivity,

@@ -1,5 +1,6 @@
 package com.bangkit.capstone.kulinerin.ui.fragment
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -46,7 +47,7 @@ class ProfileFragment : Fragment() {
                 startActivity(intent)
             }
             btnLogout.setOnClickListener {
-                logoutUser()
+                showLogoutConfirmationDialog()
             }
         }
 
@@ -84,6 +85,19 @@ class ProfileFragment : Fragment() {
                 Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun showLogoutConfirmationDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Logout")
+        builder.setMessage("Are you sure you want to logout?")
+        builder.setPositiveButton("Yes") { dialog, which ->
+            logoutUser()
+        }
+        builder.setNegativeButton("No") { dialog, which ->
+            dialog.dismiss()
+        }
+        builder.create().show()
     }
 
     private fun logoutUser() {

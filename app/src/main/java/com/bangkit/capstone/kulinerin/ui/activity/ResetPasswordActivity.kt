@@ -2,6 +2,7 @@ package com.bangkit.capstone.kulinerin.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -18,6 +19,7 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityResetPasswordBinding
     private val accountViewModel: AccountViewModel by viewModels()
+    private lateinit var countDownTimer: CountDownTimer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,17 +27,19 @@ class ResetPasswordActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val email = intent.getStringExtra("EXTRA_EMAIL")
-        Log.d(TAG, "Received email: $email") // Log the email value
+        Log.d(TAG, "Received email: $email")
+
+        startCountDownTimer()
 
         binding.apply {
             edInputPassword.setHint("New Password")
 
             btnConfirm.setOnClickListener {
                 val password = edInputPassword.getPassword()
-                val otp = edInputOtp.getOtp() // This will now correctly return the OTP string
+                val otp = edInputOtp.getOtp()
 
-                Log.d(TAG, "Password entered: $password")  // Log the password
-                Log.d(TAG, "OTP entered: $otp")  // Log the OTP
+                Log.d(TAG, "Password entered: $password")
+                Log.d(TAG, "OTP entered: $otp")
 
                 edInputEmail.setError(null)
                 edInputPassword.setError(null)
@@ -121,6 +125,37 @@ class ResetPasswordActivity : AppCompatActivity() {
                 ).show()
             }
         })
+    }
+
+    private fun startCountDownTimer() {
+        countDownTimer = object : CountDownTimer(5 * 60 * 1000, 1000) { // 5 menit
+            override fun onTick(millisUntilFinished: Long) {
+                val seconds = (millisUntilFinished / 1000) % 60
+                val minutes = millisUntilFinished / 1000 / 60
+                binding.tvCountdown.text = String.format("%02d:%02d", minutes, seconds)
+            }
+
+            override fun onFinish() {
+                Toast.makeText(
+                    this@ResetPasswordActivity,
+                    "Time is up. Redirecting to Login...",
+                    Toast.LENGTH_SHORT
+                ).show()
+                navigateToLogin()
+            }
+        }.start()
+    }
+
+
+    private fun navigateToLogin() {
+        val intent = Intent(this@ResetPasswordActivity, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        countDownTimer.cancel()
     }
 
     companion object {
