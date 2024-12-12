@@ -139,7 +139,6 @@ class ScanActivity : AppCompatActivity() {
             Toast.makeText(this, "Failed to process the image", Toast.LENGTH_SHORT).show()
             return
         }
-        Log.d("sendImageToResult", "File Path: ${file.absolutePath}, Exists: ${file.exists()}")
         uploadImage(file, uri)
     }
 
@@ -153,7 +152,6 @@ class ScanActivity : AppCompatActivity() {
             }
             tempFile
         } catch (e: Exception) {
-            Log.e("uriToFile", "Error converting URI to file: ${e.message}", e)
             null
         }
     }
