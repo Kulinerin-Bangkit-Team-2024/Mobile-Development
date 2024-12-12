@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
@@ -134,37 +135,25 @@ class ScanActivity : AppCompatActivity() {
     private fun sendImageToResult(uri: Uri) {
         binding.progressBar.visibility = View.VISIBLE
         val file = uriToFile(uri) ?: run {
-        binding.progressBar.visibility = View.GONE
+            binding.progressBar.visibility = View.GONE
             Toast.makeText(this, "Failed to process the image", Toast.LENGTH_SHORT).show()
             return
         }
+        Log.d("sendImageToResult", "File Path: ${file.absolutePath}, Exists: ${file.exists()}")
         uploadImage(file, uri)
     }
 
     private fun uriToFile(uri: Uri): File? {
         return try {
-            val contentResolver = this.contentResolver
-            val mimeType = contentResolver.getType(uri)
-
-            if (mimeType != null && mimeType.startsWith("image")) {
-                val fileExtension = when (mimeType) {
-                    "image/png" -> ".png"
-                    "image/jpeg" -> ".jpeg"
-                    else -> ".jpg"
+            val tempFile = File.createTempFile("temp_image", ".jpeg", cacheDir)
+            contentResolver.openInputStream(uri)?.use { inputStream ->
+                tempFile.outputStream().use { outputStream ->
+                    inputStream.copyTo(outputStream)
                 }
-
-                val tempFile = File.createTempFile("temp_image", fileExtension, cacheDir)
-
-                contentResolver.openInputStream(uri)?.use { inputStream ->
-                    tempFile.outputStream().use { outputStream ->
-                        inputStream.copyTo(outputStream)
-                    }
-                }
-                tempFile
-            } else {
-                null
             }
+            tempFile
         } catch (e: Exception) {
+            Log.e("uriToFile", "Error converting URI to file: ${e.message}", e)
             null
         }
     }
@@ -211,7 +200,6 @@ class ScanActivity : AppCompatActivity() {
             }
         })
     }
-
 
     private fun navigateToResultActivity(uri: Uri, foodName: String, placeofOrigin: String, foodDescription: String) {
         val intent = Intent(this, ResultActivity::class.java).apply {
