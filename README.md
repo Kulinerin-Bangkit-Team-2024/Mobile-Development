@@ -8,6 +8,10 @@ KulinerIn is an innovative app designed to help you explore and recognize the di
 ## Installation 🔨
 **Download App In This Repository**
 
+or
+
+[Download](https://github.com/Kulinerin-Bangkit-Team-2024/Mobile-Development/releases/download/beta/kuliner-in.apk)
+
 ## Maintainers 🧑‍🤝‍🧑
 This project is maintained by:
 * [I Kadek Indra Agusta Pratama](https://github.com/dduuddeekk)
