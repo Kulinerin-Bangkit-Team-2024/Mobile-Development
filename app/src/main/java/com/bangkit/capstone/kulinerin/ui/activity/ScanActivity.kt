@@ -187,9 +187,9 @@ class ScanActivity : AppCompatActivity() {
                     val errorBody = response.body()
                     if (response.code() == 500) {
                         Toast.makeText(this@ScanActivity,
-                            errorBody?.message?: "Internal Server Error", Toast.LENGTH_LONG).show()
+                            errorBody?.message?: "Image is Not Clear", Toast.LENGTH_LONG).show()
                     } else {
-                        Toast.makeText(this@ScanActivity, response.message(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@ScanActivity, errorBody?.message?: "Image is Not Clear", Toast.LENGTH_LONG).show()
                     }
                 }
             }
