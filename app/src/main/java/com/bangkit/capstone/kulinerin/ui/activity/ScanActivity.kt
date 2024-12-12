@@ -181,11 +181,12 @@ class ScanActivity : AppCompatActivity() {
                         val foodDescription = responseBody.data.queryResult[0].description
                         navigateToResultActivity(uri, foodName, placeOfOrigin, foodDescription)
                     } else {
-                        Toast.makeText(this@ScanActivity, response.message(), Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@ScanActivity, "Low confidence result.", Toast.LENGTH_LONG).show()
                     }
                 } else {
+                    val errorBody = response.body()
                     if (response.code() == 500) {
-                        Toast.makeText(this@ScanActivity, "Internal Server Error", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@ScanActivity, "${errorBody?.message}", Toast.LENGTH_LONG).show()
                     } else {
                         Toast.makeText(this@ScanActivity, response.message(), Toast.LENGTH_LONG).show()
                     }
