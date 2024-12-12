@@ -5,7 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -132,9 +132,9 @@ class ScanActivity : AppCompatActivity() {
     }
 
     private fun sendImageToResult(uri: Uri) {
-        binding.progressBar.visibility = android.view.View.VISIBLE
+        binding.progressBar.visibility = View.VISIBLE
         val file = uriToFile(uri) ?: run {
-            Log.e("ScanActivity", "Failed to convert URI to File")
+        binding.progressBar.visibility = View.GONE
             Toast.makeText(this, "Failed to process the image", Toast.LENGTH_SHORT).show()
             return
         }
@@ -170,9 +170,7 @@ class ScanActivity : AppCompatActivity() {
     }
 
     private fun uploadImage(file: File, uri: Uri) {
-        binding.progressBar.apply {
-            visibility = android.view.View.VISIBLE
-        }
+        binding.progressBar.visibility = View.VISIBLE
 
         val mimeType = contentResolver.getType(uri) ?: "image/jpeg"
 
@@ -187,7 +185,7 @@ class ScanActivity : AppCompatActivity() {
         val call = apiService.uploadImage("Bearer $token", part)
         call.enqueue(object : Callback<ScanFoodResponse> {
             override fun onResponse(call: Call<ScanFoodResponse>, response: Response<ScanFoodResponse>) {
-                binding.progressBar.visibility = android.view.View.GONE
+                binding.progressBar.visibility = View.GONE
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
@@ -208,7 +206,7 @@ class ScanActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ScanFoodResponse>, t: Throwable) {
-                binding.progressBar.visibility = android.view.View.GONE
+                binding.progressBar.visibility = View.GONE
                 Toast.makeText(this@ScanActivity, "${t.message}", Toast.LENGTH_LONG).show()
             }
         })

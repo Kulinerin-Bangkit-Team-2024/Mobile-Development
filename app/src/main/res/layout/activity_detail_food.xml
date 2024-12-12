@@ -76,7 +76,7 @@
                 style="@style/CaptionStyle"
                 android:justificationMode="inter_word"
                 android:text="@string/food_description"
-                android:background="@color/background_blue"
+                android:background="?attr/colorSecondary"
                 android:padding="8dp"/>
 
         </LinearLayout>
