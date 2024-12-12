@@ -176,10 +176,10 @@ class ScanActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
-                        val foodName = responseBody.data.queryResult[0].foodName
-                        val placeOfOrigin = responseBody.data.queryResult[0].placeOfOrigin
-                        val foodDescription = responseBody.data.queryResult[0].description
-                        navigateToResultActivity(uri, foodName, placeOfOrigin, foodDescription)
+                        val foodName = responseBody.data?.queryResult?.get(0)?.foodName
+                        val placeOfOrigin = responseBody.data?.queryResult?.get(0)?.placeOfOrigin
+                        val foodDescription = responseBody.data?.queryResult?.get(0)?.description
+                        navigateToResultActivity(uri, foodName?: "", placeOfOrigin?: "", foodDescription?: "")
                     } else {
                         Toast.makeText(this@ScanActivity, "Low confidence result.", Toast.LENGTH_LONG).show()
                     }
