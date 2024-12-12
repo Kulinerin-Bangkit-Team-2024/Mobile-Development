@@ -185,11 +185,12 @@ class ScanActivity : AppCompatActivity() {
                     }
                 } else {
                     val errorBody = response.body()
+                    val message = errorBody?.message?: "Image is Not Clear"
                     if (response.code() == 500) {
                         Toast.makeText(this@ScanActivity,
-                            errorBody?.message?: "Image is Not Clear", Toast.LENGTH_LONG).show()
+                            message, Toast.LENGTH_LONG).show()
                     } else {
-                        Toast.makeText(this@ScanActivity, errorBody?.message?: "Image is Not Clear", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@ScanActivity, message, Toast.LENGTH_LONG).show()
                     }
                 }
             }
