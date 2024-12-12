@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.bangkit.capstone.kulinerin.R
 import com.bangkit.capstone.kulinerin.data.api.ApiConfig
 import com.bangkit.capstone.kulinerin.data.preference.SessionPreferences
 import com.bangkit.capstone.kulinerin.data.preference.sessionDataStore
@@ -16,6 +17,7 @@ import com.bangkit.capstone.kulinerin.data.response.UserProfileResponse
 import com.bangkit.capstone.kulinerin.databinding.FragmentProfileBinding
 import com.bangkit.capstone.kulinerin.ui.activity.SettingActivity
 import com.bangkit.capstone.kulinerin.ui.activity.WelcomeActivity
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import retrofit2.Call
@@ -73,6 +75,11 @@ class ProfileFragment : Fragment() {
                     if (userProfile != null) {
                         binding.pvUsername.setName(userProfile.user.name)
                         binding.pvEmail.setEmail(userProfile.user.email)
+                        Glide.with(requireActivity())
+                            .load(userProfile.user.profilePicture)
+                            .placeholder(R.drawable.profile)
+                            .error(R.drawable.profile)
+                            .into(binding.profileImage)
                     } else {
                         Toast.makeText(requireContext(), "Failed to load user data", Toast.LENGTH_SHORT).show()
                     }
@@ -91,10 +98,10 @@ class ProfileFragment : Fragment() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Logout")
         builder.setMessage("Are you sure you want to logout?")
-        builder.setPositiveButton("Yes") { dialog, which ->
+        builder.setPositiveButton("Yes") { _, _ ->
             logoutUser()
         }
-        builder.setNegativeButton("No") { dialog, which ->
+        builder.setNegativeButton("No") { dialog, _ ->
             dialog.dismiss()
         }
         builder.create().show()
