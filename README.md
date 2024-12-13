@@ -4,7 +4,7 @@
 KulinerIn is an innovative app designed to help you explore and recognize the diverse traditional dishes of Indonesia. With advanced technology and user-friendly features, KulinerIn is the perfect companion for food enthusiasts.
 
 ## Application's Demo
-[![](https://youtube.com/shorts/eLrhTtitvE8)](https://youtube.com/shorts/eLrhTtitvE8)
+[![](https://youtube.com/shorts/eLrhTtitvE8?si=w47hrTSClyDTNkBg)](https://youtube.com/shorts/eLrhTtitvE8?si=w47hrTSClyDTNkBg)
 
 ## Installation 🔨
 **Download App In This Repository**
